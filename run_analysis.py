@@ -1,9 +1,10 @@
 import yfinance as yf
 import pandas as pd
 import json
+import os
 
 def run_analysis():
-    """Fetches stock data and saves it to a JSON file."""
+    """Fetches stock data and saves it as a JavaScript file."""
     brazilian_tickers = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA"]
     american_tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
     all_tickers = brazilian_tickers + american_tickers
@@ -39,15 +40,15 @@ def run_analysis():
             if target_price and current_price and current_price > 0:
                 t_ratio = target_price / current_price
 
-            recommendations = stock.recommendations
+            recs = stock.recommendations
             strong_buy, buy, hold, sell, strong_sell = 0, 0, 0, 0, 0
-            if recommendations is not None and not recommendations.empty:
-                latest_recommendations = recommendations.iloc[-1]
-                strong_buy = latest_recommendations.get('strongBuy', 0)
-                buy = latest_recommendations.get('buy', 0)
-                hold = latest_recommendations.get('hold', 0)
-                sell = latest_recommendations.get('sell', 0)
-                strong_sell = latest_recommendations.get('strongSell', 0)
+            if recs is not None and not recs.empty:
+                latest_recs = recs.iloc[-1]
+                strong_buy = int(latest_recs.get('strongBuy', 0))
+                buy = int(latest_recs.get('buy', 0))
+                hold = int(latest_recs.get('hold', 0))
+                sell = int(latest_recs.get('sell', 0))
+                strong_sell = int(latest_recs.get('strongSell', 0))
 
             c_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5)
 
@@ -71,11 +72,17 @@ def run_analysis():
     df = pd.DataFrame(results)
     json_data = df.to_json(orient='records', indent=4)
     
-    # Save the data to the public folder, where the website can access it
-    with open('public/stock_analysis.json', 'w') as f:
-        f.write(json_data)
+    # Define the output path for the data file inside the 'public' folder
+    output_path = 'public/stock_data.js'
+    
+    # Ensure the 'public' directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
+    # Save the data as a JavaScript variable in stock_data.js
+    with open(output_path, 'w') as f:
+        f.write(f"const stockData = {json_data};")
 
-    print("Analysis complete. Data saved to public/stock_analysis.json")
+    print(f"Analysis complete. Data saved to {output_path}")
 
 if __name__ == "__main__":
     run_analysis()
