@@ -23,7 +23,10 @@ def run_analysis():
             cashflow = stock.get_cashflow()
             operating_cash_flow = None
             if not cashflow.empty:
-                if 'Total Cash From Operating Activities' in cashflow.index:
+                # Try a few common names for Operating Cash Flow
+                if 'Operating Cash Flow' in cashflow.index:
+                    operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
+                elif 'Total Cash From Operating Activities' in cashflow.index:
                     operating_cash_flow = cashflow.loc['Total Cash From Operating Activities'].iloc[0]
                 elif 'Cash Flow From Operating Activities' in cashflow.index:
                     operating_cash_flow = cashflow.loc['Cash Flow From Operating Activities'].iloc[0]
@@ -76,15 +79,10 @@ def run_analysis():
             print(f'Could not process {ticker}: {e}')
 
     df = pd.DataFrame(results)
+    # Restore the original script logic for saving the file
     json_data = df.to_json(orient='records', indent=4)
-    
-    # Define the output path for the data file inside the 'public' folder
     output_path = 'public/stock_data.js'
-    
-    # Ensure the 'public' directory exists
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    
-    # Save the data as a JavaScript variable in stock_data.js
     with open(output_path, 'w') as f:
         f.write(f"const stockData = {json_data};")
 
