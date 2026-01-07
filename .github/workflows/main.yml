@@ -3,7 +3,7 @@ name: Daily Stock Analysis and Deploy
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight UTC
+    - cron: '*/30 * * * *' # Runs every 30 minutes
   workflow_dispatch: # Allows manual triggering
 
 jobs:
@@ -34,4 +34,3 @@ jobs:
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_ID: findash-55202
-        PROJECT_PATH: public
