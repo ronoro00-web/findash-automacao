@@ -63,7 +63,7 @@ def run_analysis():
                 'Neutro': hold,
                 'Venda': sell,
                 'Venda Forte': strong_sell,
-                'C': c_value
+                'R': c_value
             })
             print(f"Successfully processed {ticker}")
         except Exception as e:
