@@ -30,13 +30,13 @@ def run_analysis():
 
             shares_outstanding = info.get('sharesOutstanding')
             fco_per_share = None
-            p_fco_ratio = None
+            p_fco_ratio = None # This is 'O'
             if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
                 fco_per_share = operating_cash_flow / shares_outstanding
                 if current_price and fco_per_share > 0:
                     p_fco_ratio = current_price / fco_per_share
 
-            t_ratio = None
+            t_ratio = None # This is 'T'
             if target_price and current_price and current_price > 0:
                 t_ratio = target_price / current_price
 
@@ -50,7 +50,12 @@ def run_analysis():
                 sell = int(latest_recs.get('sell', 0))
                 strong_sell = int(latest_recs.get('strongSell', 0))
 
-            c_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5)
+            r_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5) # This is 'R'
+
+            # Calculate the new 'C' metric
+            c_metric = None
+            if t_ratio is not None and r_value is not None and p_fco_ratio is not None and p_fco_ratio != 0:
+                c_metric = (t_ratio * r_value) / p_fco_ratio
 
             results.append({
                 'Ticker': ticker,
@@ -63,7 +68,8 @@ def run_analysis():
                 'Neutro': hold,
                 'Venda': sell,
                 'Venda Forte': strong_sell,
-                'R': c_value
+                'R': r_value,
+                'C': c_metric
             })
             print(f"Successfully processed {ticker}")
         except Exception as e:
