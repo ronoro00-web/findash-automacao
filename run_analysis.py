@@ -12,7 +12,7 @@ def run_analysis():
     all_tickers = brazilian_tickers + american_tickers
     results = []
 
-    print("--- Starting Robust Stock Analysis ---")
+    print("--- Starting Robust Stock Analysis with Index Debugging ---")
 
     for ticker in all_tickers:
         try:
@@ -22,12 +22,14 @@ def run_analysis():
 
             current_price = info.get('regularMarketPrice')
             
-            # --- Gracefully handle missing cashflow data ---
             p_fco_ratio = None
             try:
                 cashflow = stock.get_cashflow()
-                if not cashflow.empty and 'Operating Cash Flow' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
+                # The key we are looking for
+                ocf_key = 'Operating Cash Flow'
+
+                if not cashflow.empty and ocf_key in cashflow.index:
+                    operating_cash_flow = cashflow.loc[ocf_key].iloc[0]
                     shares_outstanding = info.get('sharesOutstanding')
                     
                     if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
@@ -35,7 +37,9 @@ def run_analysis():
                         if current_price and fco_per_share and fco_per_share > 0:
                             p_fco_ratio = current_price / fco_per_share
                 else:
-                    print(f"Warning: 'Operating Cash Flow' not found for {ticker}.", file=sys.stdout)
+                    # --- DEBUG: Print available keys if our key is not found ---
+                    available_keys = list(cashflow.index) if not cashflow.empty else 'Cashflow DataFrame is empty'
+                    print(f"Warning: '{ocf_key}' not found for {ticker}. Available keys: {available_keys}", file=sys.stdout)
             except Exception as e:
                 print(f"Warning: Could not calculate P/FCO for {ticker}. Reason: {e}", file=sys.stdout)
 
@@ -47,7 +51,6 @@ def run_analysis():
             recs = stock.recommendations
             strong_buy, buy, hold, sell, strong_sell = 0, 0, 0, 0, 0
             if recs is not None and not recs.empty:
-                # Get the most recent recommendation row
                 if 'strongBuy' in recs.columns:
                     latest_recs = recs.iloc[-1]
                     strong_buy = int(latest_recs.get('strongBuy', 0))
@@ -79,7 +82,6 @@ def run_analysis():
             print(f"Successfully processed {ticker}")
         except Exception as e:
             print(f'CRITICAL ERROR: Could not process {ticker}: {e}', file=sys.stderr)
-            # We will continue to the next ticker instead of exiting
             continue
 
     df = pd.DataFrame(results)
