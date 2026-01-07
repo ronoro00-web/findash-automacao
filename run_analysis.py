@@ -7,12 +7,19 @@ import sys
 def run_analysis():
     """Fetches stock data and saves it as a JavaScript file."""
     
-    brazilian_tickers = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA"]
+    # Expanded list of 30 major Brazilian companies
+    brazilian_tickers = [
+        "VALE3.SA", "PETR4.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA", "WEGE3.SA",
+        "B3SA3.SA", "SUZB3.SA", "ITSA4.SA", "GGBR4.SA", "MGLU3.SA", "RDOR3.SA",
+        "JBSS3.SA", "BPAC11.SA", "LREN3.SA", "RADL3.SA", "NTCO3.SA", "BBAS3.SA",
+        "CSAN3.SA", "CCRO3.SA", "RAIL3.SA", "EQTL3.SA", "ELET3.SA", "VIVT3.SA",
+        "HYPE3.SA", "IRBR3.SA", "SBSP3.SA", "RENT3.SA", "CIEL3.SA", "EMBR3.SA"
+    ]
     american_tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
     all_tickers = brazilian_tickers + american_tickers
     results = []
 
-    print("--- Starting Final Stock Analysis ---")
+    print(f"--- Starting Analysis for {len(all_tickers)} Tickers ---")
 
     for ticker in all_tickers:
         try:
@@ -25,7 +32,6 @@ def run_analysis():
             p_fco_ratio = None
             try:
                 cashflow = stock.get_cashflow()
-                # Correct key for Operating Cash Flow
                 ocf_key = 'OperatingCashFlow'
 
                 if not cashflow.empty and ocf_key in cashflow.index:
