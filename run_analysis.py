@@ -12,7 +12,7 @@ def run_analysis():
     all_tickers = brazilian_tickers + american_tickers
     results = []
 
-    print("--- Starting Robust Stock Analysis with Index Debugging ---")
+    print("--- Starting Final Stock Analysis ---")
 
     for ticker in all_tickers:
         try:
@@ -25,8 +25,8 @@ def run_analysis():
             p_fco_ratio = None
             try:
                 cashflow = stock.get_cashflow()
-                # The key we are looking for
-                ocf_key = 'Operating Cash Flow'
+                # Correct key for Operating Cash Flow
+                ocf_key = 'OperatingCashFlow'
 
                 if not cashflow.empty and ocf_key in cashflow.index:
                     operating_cash_flow = cashflow.loc[ocf_key].iloc[0]
@@ -37,9 +37,7 @@ def run_analysis():
                         if current_price and fco_per_share and fco_per_share > 0:
                             p_fco_ratio = current_price / fco_per_share
                 else:
-                    # --- DEBUG: Print available keys if our key is not found ---
-                    available_keys = list(cashflow.index) if not cashflow.empty else 'Cashflow DataFrame is empty'
-                    print(f"Warning: '{ocf_key}' not found for {ticker}. Available keys: {available_keys}", file=sys.stdout)
+                    print(f"Warning: Key '{ocf_key}' not found for {ticker}. P/FCO will be null.", file=sys.stdout)
             except Exception as e:
                 print(f"Warning: Could not calculate P/FCO for {ticker}. Reason: {e}", file=sys.stdout)
 
