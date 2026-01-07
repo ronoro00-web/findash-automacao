@@ -3,30 +3,9 @@ import pandas as pd
 import json
 import os
 
-def write_debug_info():
-    """Fetches cashflow metric names for a sample ticker and writes them to a file."""
-    try:
-        print("--- Writing Debug Info ---")
-        ticker = "AAPL"
-        stock = yf.Ticker(ticker)
-        cashflow = stock.get_cashflow()
-        output_path = 'public/debug_info.txt'
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, 'w') as f:
-            if not cashflow.empty:
-                f.write("Available cashflow metrics for AAPL:\n")
-                f.write("\n".join(cashflow.index))
-            else:
-                f.write("Cashflow data is empty for AAPL.")
-        print(f"Debug info written to {output_path}")
-    except Exception as e:
-        print(f"Could not write debug info: {e}")
-
 def run_analysis():
     """Fetches stock data and saves it as a JavaScript file."""
     
-    write_debug_info()
-
     brazilian_tickers = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA"]
     american_tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
     all_tickers = brazilian_tickers + american_tickers
@@ -44,13 +23,8 @@ def run_analysis():
             
             cashflow = stock.get_cashflow()
             operating_cash_flow = None
-            if not cashflow.empty:
-                if 'Operating Cash Flow' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
-                elif 'Total Cash From Operating Activities' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Total Cash From Operating Activities'].iloc[0]
-                elif 'Cash Flow From Operating Activities' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Cash Flow From Operating Activities'].iloc[0]
+            if not cashflow.empty and 'Operating Cash Flow' in cashflow.index:
+                operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
 
             shares_outstanding = info.get('sharesOutstanding')
             fco_per_share = None
