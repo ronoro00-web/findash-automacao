@@ -12,7 +12,7 @@ def run_analysis():
     all_tickers = brazilian_tickers + american_tickers
     results = []
 
-    print("--- Starting Stock Analysis with Failure Detection ---")
+    print("--- Starting Robust Stock Analysis ---")
 
     for ticker in all_tickers:
         try:
@@ -22,29 +22,22 @@ def run_analysis():
 
             current_price = info.get('regularMarketPrice')
             
-            cashflow = stock.get_cashflow()
-            operating_cash_flow = None
-            if not cashflow.empty and 'Operating Cash Flow' in cashflow.index:
-                operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
-
-            shares_outstanding = info.get('sharesOutstanding')
-            
-            fco_per_share = None
+            # --- Gracefully handle missing cashflow data ---
             p_fco_ratio = None
-            if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
-                fco_per_share = operating_cash_flow / shares_outstanding
-                if current_price and fco_per_share and fco_per_share > 0:
-                    p_fco_ratio = current_price / fco_per_share
-
-            # --- CRITICAL FAILURE CHECK ---
-            if p_fco_ratio is None:
-                debug_info = f"P/FCO is None for {ticker}. \n"
-                debug_info += f"  - Current Price: {current_price}\n"
-                debug_info += f"  - Operating Cash Flow: {operating_cash_flow}\n"
-                debug_info += f"  - Shares Outstanding: {shares_outstanding}\n"
-                debug_info += f"  - FCO per Share: {fco_per_share}\n"
-                print(debug_info, file=sys.stderr) # Print to standard error
-                sys.exit(debug_info) # Exit with a clear error message
+            try:
+                cashflow = stock.get_cashflow()
+                if not cashflow.empty and 'Operating Cash Flow' in cashflow.index:
+                    operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
+                    shares_outstanding = info.get('sharesOutstanding')
+                    
+                    if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
+                        fco_per_share = operating_cash_flow / shares_outstanding
+                        if current_price and fco_per_share and fco_per_share > 0:
+                            p_fco_ratio = current_price / fco_per_share
+                else:
+                    print(f"Warning: 'Operating Cash Flow' not found for {ticker}.", file=sys.stdout)
+            except Exception as e:
+                print(f"Warning: Could not calculate P/FCO for {ticker}. Reason: {e}", file=sys.stdout)
 
             target_price = info.get('targetMeanPrice')
             t_ratio = None
@@ -54,12 +47,14 @@ def run_analysis():
             recs = stock.recommendations
             strong_buy, buy, hold, sell, strong_sell = 0, 0, 0, 0, 0
             if recs is not None and not recs.empty:
-                latest_recs = recs.iloc[-1]
-                strong_buy = int(latest_recs.get('strongBuy', 0))
-                buy = int(latest_recs.get('buy', 0))
-                hold = int(latest_recs.get('hold', 0))
-                sell = int(latest_recs.get('sell', 0))
-                strong_sell = int(latest_recs.get('strongSell', 0))
+                # Get the most recent recommendation row
+                if 'strongBuy' in recs.columns:
+                    latest_recs = recs.iloc[-1]
+                    strong_buy = int(latest_recs.get('strongBuy', 0))
+                    buy = int(latest_recs.get('buy', 0))
+                    hold = int(latest_recs.get('hold', 0))
+                    sell = int(latest_recs.get('sell', 0))
+                    strong_sell = int(latest_recs.get('strongSell', 0))
 
             r_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5)
 
@@ -83,11 +78,12 @@ def run_analysis():
             })
             print(f"Successfully processed {ticker}")
         except Exception as e:
-            print(f'Could not process {ticker}: {e}', file=sys.stderr)
-            sys.exit(f"An exception occurred while processing {ticker}: {e}")
+            print(f'CRITICAL ERROR: Could not process {ticker}: {e}', file=sys.stderr)
+            # We will continue to the next ticker instead of exiting
+            continue
 
     df = pd.DataFrame(results)
-    json_data = df.to_json(orient='records', indent=4)
+    json_data = df.to_json(orient='records', indent=4, default_handler=str)
     output_path = 'public/stock_data.js'
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as f:
