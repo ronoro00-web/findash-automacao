@@ -8,7 +8,7 @@ def run_analysis():
     """Fetches stock and ETF data and saves it as a JavaScript file."""
 
     brazilian_tickers = [
-        "VALE3.SA", "PETR4.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA", "WEGE3.SA",
+        "PETR4.SA", "ITUB4.SA", "BBDC4.SA", "WEGE3.SA",
         "B3SA3.SA", "SUZB3.SA", "ITSA4.SA", "GGBR4.SA", "MGLU3.SA", "RDOR3.SA",
         "JBSS3.SA", "BPAC11.SA", "LREN3.SA", "RADL3.SA", "NTCO3.SA", "BBAS3.SA",
         "CSAN3.SA", "CCRO3.SA", "RAIL3.SA", "EQTL3.SA", "ELET3.SA", "VIVT3.SA",
@@ -16,51 +16,51 @@ def run_analysis():
     ]
     
     american_tickers = [
-        "NVDA", "GOOGL", "AAPL", "GOOG", "MSFT", "AMZN", "META", "AVGO", "TSLA", "TSM",
+        "NVDA", "GOOGL", "AAPL", "GOOG", "MSFT", "AMZN", "META", "AVGO", "TSLA",
         "BRK.B", "BRK.A", "LLY", "WMT", "JPM", "V", "ORCL", "MA", "XOM", "JNJ", "ASML",
-        "PLTR", "NFLX", "ABBV", "BAC", "COST", "MU", "HD", "GE", "AMD", "BABA", "PG",
-        "CVX", "UNH", "GS", "CSCO", "WFC", "MS", "AZN", "KO", "HSBC", "CAT", "IBM", "TM",
+        "PLTR", "NFLX", "ABBV", "BAC", "COST", "MU", "HD", "GE", "AMD", "PG",
+        "CVX", "UNH", "GS", "CSCO", "WFC", "MS", "AZN", "KO", "HSBC", "CAT", "IBM",
         "SAP", "MRK", "NVS", "AXP", "LRCX", "NVO", "RTX", "CRM", "PM", "RY", "TMO",
         "AMAT", "ABT", "TMUS", "SHOP", "C", "MCD", "APP", "INTC", "ISRG", "SHEL", "LIN",
         "DIS", "BX", "QCOM", "PEP", "MUFG", "AMGN", "SCHW", "GEV", "INTU", "UBER",
-        "KLAC", "BLK", "BKNG", "BA", "SAN", "TJX", "PDD", "APH", "T", "VZ", "TXN", "ACN",
-        "DHR", "ANET", "NEE", "SPGI", "BHP", "HDB", "COF", "TD", "NOW", "GILD", "SONY",
+        "KLAC", "BLK", "BKNG", "BA", "SAN", "TJX", "APH", "T", "VZ", "TXN", "ACN",
+        "DHR", "ANET", "NEE", "SPGI", "BHP", "COF", "TD", "NOW", "GILD",
         "UBS", "BSX", "RIO", "ADI", "PFE", "ADBE", "SYK", "LOW", "TTE", "PANW", "UL",
         "UNP", "BBVA", "DE", "SCCO", "WELL", "MDT", "SMFG", "HON", "ETN", "BUD", "PGR",
-        "ARM", "VRTX", "CRWD", "PLD", "CB", "KKR", "SPOT", "COP", "NEM", "LMT", "SNY",
-        "BTI", "PH", "BMY", "IBN", "BN", "MELI", "HCA", "HOOD", "ADP", "CEG", "GSK",
+        "ARM", "VRTX", "CRWD", "PLD", "CB", "KKR", "SPOT", "NEM", "LMT", "SNY",
+        "BTI", "PH", "BMY", "BN", "MELI", "HCA", "HOOD", "ADP", "CEG", "GSK",
         "MCK", "CVS", "CMCSA", "SNPS", "ENB", "DASH", "CVNA", "SBUX", "CME", "MFG",
-        "SO", "MCO", "GD", "BMO", "NKE", "ICE", "MO", "AEM", "NTES", "DUK", "MMC", "UPS",
+        "SO", "MCO", "GD", "BMO", "NKE", "ICE", "MO", "AEM", "DUK", "MMC", "UPS",
         "BNS", "BP", "BAM", "BCS", "CDNS", "WM", "MMM", "MAR", "HWM", "USB", "NU", "APO",
         "PNC", "NOC", "CM", "BK", "TT", "ING", "ABNB", "SE", "REGN", "CRH", "RCL", "SHW",
         "ELV", "B", "EMR", "SNOW", "AMT", "DELL", "ITUB", "FCX", "NGG", "LYG", "TDG",
         "ORLY", "RELX", "EQIX", "GM", "ECL", "GLW", "AON", "CTAS", "CI", "CMI", "DB",
-        "MNST", "WMB", "INFY", "PBR", "PBR.A", "FDX", "ITW", "MRVL", "NWG", "NET",
+        "MNST", "WMB", "INFY", "PBR.A", "FDX", "ITW", "MRVL", "NWG", "NET",
         "WBD", "SPG", "JCI", "WDC", "HLT", "EPD", "TEL", "STX", "MDLZ", "AJG", "VRT",
         "CP", "COR", "COIN", "CNQ", "PWR", "RACE", "CSX", "RSG", "TFC", "NSC", "SLB",
-        "TRV", "MSI", "MFC", "CL", "ADSK", "CNI", "PCAR", "AMX", "AEP", "ROST", "KMI",
-        "VALE", "NXPI", "RKT", "EQNR", "FTNT", "TRI", "LHX", "E", "APD", "AFL", "BDX",
-        "NDAQ", "IDXX", "WPM", "ET", "SRE", "VLO", "ARES", "EOG", "URI", "ALNY", "ZTS",
+        "TRV", "MSI", "MFC", "CL", "ADSK", "CNI", "PCAR", "AEP", "ROST", "KMI",
+        "NXPI", "RKT", "EQNR", "FTNT", "TRI", "LHX", "E", "APD", "AFL", "BDX",
+        "NDAQ", "IDXX", "WPM", "SRE", "VLO", "ARES", "EOG", "URI", "ALNY", "ZTS",
         "WDAY", "PSX", "AZO", "PYPL", "SU", "DLR", "F", "ALL", "TRP", "RBLX", "MPLX", "O",
-        "VST", "MET", "MPC", "CMG", "EA", "BIDU", "TCOM", "TAK", "DDOG", "CBRE", "CAH",
+        "VST", "MET", "MPC", "CMG", "EA", "CBRE", "CAH",
         "AXON", "RDDT", "ARGX", "AME", "HEI", "MSTR", "EW", "D", "BKR", "GWW", "FER",
         "TTWO", "DEO", "PSA", "TGT", "ROP", "DAL", "AU", "FAST", "AMP", "CTVA", "ROK",
         "MPWR", "RKLB", "OKE", "HLN", "CARR", "CCJ", "MSCI", "FERG", "IMO", "EXC",
-        "WCN", "XEL", "TEAM", "LNG", "CPNG", "CUK", "FNV", "SYM", "CCL", "AIG", "HEI.A",
-        "A", "YUM", "LVS", "IQV", "ETR", "GFI", "JD", "DHI", "PUK", "PRU", "OXY", "CTSH",
-        "EBAY", "GRMN", "FANG", "PAYX", "ALC", "ABEV", "MCHP", "VEEV", "TKO", "GEHC",
-        "PEG", "VMC", "CCEP", "ASX", "HMC", "TRGP", "UAL", "EL", "HIG", "MLM", "NUE",
+        "WCN", "XEL", "TEAM", "CPNG", "CUK", "FNV", "SYM", "CCL", "AIG", "HEI.A",
+        "A", "YUM", "LVS", "IQV", "ETR", "GFI", "DHI", "PUK", "PRU", "OXY", "CTSH",
+        "EBAY", "GRMN", "PAYX", "ALC", "MCHP", "VEEV", "TKO", "GEHC",
+        "PEG", "VMC", "CCEP", "HMC", "TRGP", "EL", "HIG", "MLM", "NUE",
         "FICO", "NOK", "KR", "INSM", "CCI", "WAB", "CPRT", "FISV", "TEVA", "STT", "KDP",
         "FLUT", "KGC", "ZS", "KEYS", "HSY", "RYAAY", "EXPE", "CIEN", "FIX", "RMD",
-        "VTR", "MDB", "ED", "SLF", "NTRA", "MT", "CLS", "ODFL", "SYY", "BBD", "BBDO",
+        "VTR", "MDB", "ED", "SLF", "NTRA", "MT", "CLS", "ODFL", "SYY", "BBDO",
         "FIS", "OTIS", "TER", "PCG", "UI", "ACGL", "SOFI", "WEC", "EQT", "XYL",
         "LYV", "HUM", "IX", "ERIC", "VIK", "FOXA", "COHR", "CHT", "VOD", "RJF", "KMB",
-        "IR", "FITB", "FMX", "MTB", "IBKR", "KVUE", "ASTS", "WTW", "FOX", "SYF",
-        "DG", "WIT", "STLA", "KB", "VRSK", "CVE", "QSR", "CHTR", "HPE", "MTD", "EXR",
+        "IR", "FITB", "MTB", "IBKR", "KVUE", "ASTS", "WTW", "FOX", "SYF",
+        "DG", "WIT", "STLA", "VRSK", "QSR", "CHTR", "HPE", "MTD", "EXR",
         "VICI", "NTR", "EME", "ESLT", "WDS", "LPLA", "ULTA", "ROL", "NRG", "HBAN",
         "LITE", "ADM", "ALAB", "DXCM", "DOV", "AFRM", "KHC", "PHG", "TPR", "NTRS",
         "FCNCA", "MKL", "BIIB", "CSGP", "BRO", "CBOE", "AEE", "ATO", "DTE", "TSCO",
-        "TME", "NMR", "SHG", "CFG", "BE", "EFX", "DLTR", "IRM", "LEN.B", "FSLR",
+        "NMR", "CFG", "BE", "EFX", "DLTR", "IRM", "LEN.B", "FSLR",
         "STM", "WRB", "FTS"
     ]
 
@@ -68,6 +68,8 @@ def run_analysis():
     american_etfs = ["BTCI", "DIVO", "GLD", "GPIQ", "IBIT", "JEPQ", "MCHI", "QDVO", 
                      "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG"]
     etf_tickers = brazilian_etfs + american_etfs
+    
+    all_brazilian_assets = brazilian_tickers + brazilian_etfs
 
     all_tickers = brazilian_tickers + american_tickers + etf_tickers
     results = []
@@ -79,14 +81,18 @@ def run_analysis():
             print(f"--- Processing {ticker} ---")
             asset = yf.Ticker(ticker)
             info = asset.info
+
+            is_brazilian = ticker in all_brazilian_assets
+            price_prefix = "R$" if is_brazilian else "U$"
+            
             current_price = info.get('regularMarketPrice')
+            formatted_current_price = f"{price_prefix} {current_price:.2f}" if current_price is not None else "N/A"
 
             # --- ETF Processing ---
-            is_etf = ticker in etf_tickers
-            if is_etf:
+            if ticker in etf_tickers:
                 results.append({
                     'Ticker': f"{ticker} (ETF)",
-                    'Preço Atual': current_price,
+                    'Preço Atual': formatted_current_price,
                     'P/FCO (O)': 'N/A',
                     'Preço Alvo': 'N/A',
                     'T (Alvo/Preço)': 'N/A',
@@ -95,9 +101,9 @@ def run_analysis():
                     'C': 'N/A'
                 })
                 print(f"Successfully processed ETF: {ticker}")
-                continue # Skip to the next ticker
+                continue
 
-            # --- Stock Processing (existing logic) ---
+            # --- Stock Processing ---
             p_fco_ratio = None
             try:
                 cashflow = asset.get_cashflow()
@@ -110,9 +116,10 @@ def run_analysis():
                         if current_price and fco_per_share and fco_per_share > 0:
                             p_fco_ratio = current_price / fco_per_share
             except Exception:
-                pass # Ignore errors in P/FCO calculation
+                pass
 
             target_price = info.get('targetMeanPrice')
+            formatted_target_price = f"{price_prefix} {target_price:.2f}" if target_price is not None else "N/A"
             t_ratio = (target_price / current_price) if target_price and current_price and current_price > 0 else None
 
             recs = asset.recommendations
@@ -133,10 +140,13 @@ def run_analysis():
 
             results.append({
                 'Ticker': ticker,
-                'Preço Atual': current_price, 'P/FCO (O)': p_fco_ratio,
-                'Preço Alvo': target_price, 'T (Alvo/Preço)': t_ratio, 'Compra Forte': strong_buy,
-                'Compra': buy, 'Neutro': hold, 'Venda': sell, 'Venda Forte': strong_sell,
-                'R': r_value, 'C': c_metric
+                'Preço Atual': formatted_current_price,
+                'P/FCO (O)': p_fco_ratio,
+                'Preço Alvo': formatted_target_price,
+                'T (Alvo/Preço)': t_ratio,
+                'Compra Forte': strong_buy, 'Compra': buy, 'Neutro': hold, 'Venda': sell, 'Venda Forte': strong_sell,
+                'R': r_value,
+                'C': c_metric
             })
             print(f"Successfully processed Stock: {ticker}")
 
