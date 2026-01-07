@@ -5,8 +5,8 @@ import os
 import sys
 
 def run_analysis():
-    """Fetches stock data and saves it as a JavaScript file."""
-    
+    """Fetches stock and ETF data and saves it as a JavaScript file."""
+
     brazilian_tickers = [
         "VALE3.SA", "PETR4.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA", "WEGE3.SA",
         "B3SA3.SA", "SUZB3.SA", "ITSA4.SA", "GGBR4.SA", "MGLU3.SA", "RDOR3.SA",
@@ -15,7 +15,6 @@ def run_analysis():
         "HYPE3.SA", "IRBR3.SA", "SBSP3.SA", "RENT3.SA", "CIEL3.SA", "EMBR3.SA"
     ]
     
-    # Expanded list of major world companies
     american_tickers = [
         "NVDA", "GOOGL", "AAPL", "GOOG", "MSFT", "AMZN", "META", "AVGO", "TSLA", "TSM",
         "BRK.B", "BRK.A", "LLY", "WMT", "JPM", "V", "ORCL", "MA", "XOM", "JNJ", "ASML",
@@ -65,74 +64,82 @@ def run_analysis():
         "STM", "WRB", "FTS"
     ]
 
-    all_tickers = brazilian_tickers + american_tickers
+    brazilian_etfs = ["BOVA11.SA", "SPXR11.SA", "LFTB11.SA", "AREA11.SA", "DIVO11.SA", "B5MB11.SA", "DOLA11.SA", "AUPO11.SA"]
+    american_etfs = ["BTCI", "DIVO", "GLD", "GPIQ", "IBIT", "JEPQ", "MCHI", "QDVO", 
+                     "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG"]
+    etf_tickers = brazilian_etfs + american_etfs
+
+    all_tickers = brazilian_tickers + american_tickers + etf_tickers
     results = []
 
-    print(f"--- Starting Analysis for {len(all_tickers)} Tickers ---")
+    print(f"--- Starting Analysis for {len(all_tickers)} Tickers (Stocks and ETFs) ---")
 
     for ticker in all_tickers:
         try:
             print(f"--- Processing {ticker} ---")
-            stock = yf.Ticker(ticker)
-            info = stock.info
-
+            asset = yf.Ticker(ticker)
+            info = asset.info
             current_price = info.get('regularMarketPrice')
-            
+
+            # --- ETF Processing ---
+            is_etf = ticker in etf_tickers
+            if is_etf:
+                results.append({
+                    'Ticker': f"{ticker} (ETF)",
+                    'Preço Atual': current_price,
+                    'P/FCO (O)': 'N/A',
+                    'Preço Alvo': 'N/A',
+                    'T (Alvo/Preço)': 'N/A',
+                    'Compra Forte': 'N/A', 'Compra': 'N/A', 'Neutro': 'N/A', 'Venda': 'N/A', 'Venda Forte': 'N/A',
+                    'R': 'N/A',
+                    'C': 'N/A'
+                })
+                print(f"Successfully processed ETF: {ticker}")
+                continue # Skip to the next ticker
+
+            # --- Stock Processing (existing logic) ---
             p_fco_ratio = None
             try:
-                cashflow = stock.get_cashflow()
+                cashflow = asset.get_cashflow()
                 ocf_key = 'OperatingCashFlow'
-
                 if not cashflow.empty and ocf_key in cashflow.index:
                     operating_cash_flow = cashflow.loc[ocf_key].iloc[0]
                     shares_outstanding = info.get('sharesOutstanding')
-                    
                     if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
                         fco_per_share = operating_cash_flow / shares_outstanding
                         if current_price and fco_per_share and fco_per_share > 0:
                             p_fco_ratio = current_price / fco_per_share
-                else:
-                    print(f"Warning: Key '{ocf_key}' not found for {ticker}. P/FCO will be null.", file=sys.stdout)
-            except Exception as e:
-                print(f"Warning: Could not calculate P/FCO for {ticker}. Reason: {e}", file=sys.stdout)
+            except Exception:
+                pass # Ignore errors in P/FCO calculation
 
             target_price = info.get('targetMeanPrice')
-            t_ratio = None
-            if target_price and current_price and current_price > 0:
-                t_ratio = target_price / current_price
+            t_ratio = (target_price / current_price) if target_price and current_price and current_price > 0 else None
 
-            recs = stock.recommendations
+            recs = asset.recommendations
             strong_buy, buy, hold, sell, strong_sell = 0, 0, 0, 0, 0
-            if recs is not None and not recs.empty:
-                if 'strongBuy' in recs.columns:
-                    latest_recs = recs.iloc[-1]
-                    strong_buy = int(latest_recs.get('strongBuy', 0))
-                    buy = int(latest_recs.get('buy', 0))
-                    hold = int(latest_recs.get('hold', 0))
-                    sell = int(latest_recs.get('sell', 0))
-                    strong_sell = int(latest_recs.get('strongSell', 0))
+            if recs is not None and not recs.empty and 'strongBuy' in recs.columns:
+                latest_recs = recs.iloc[-1]
+                strong_buy = int(latest_recs.get('strongBuy', 0))
+                buy = int(latest_recs.get('buy', 0))
+                hold = int(latest_recs.get('hold', 0))
+                sell = int(latest_recs.get('sell', 0))
+                strong_sell = int(latest_recs.get('strongSell', 0))
 
             r_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5)
 
             c_metric = None
-            if t_ratio is not None and r_value is not None and p_fco_ratio is not None and p_fco_ratio != 0:
+            if t_ratio and r_value and p_fco_ratio and p_fco_ratio != 0:
                 c_metric = (t_ratio * r_value) / p_fco_ratio
 
             results.append({
                 'Ticker': ticker,
-                'Preço Atual': current_price,
-                'P/FCO (O)': p_fco_ratio,
-                'Preço Alvo': target_price,
-                'T (Alvo/Preço)': t_ratio,
-                'Compra Forte': strong_buy,
-                'Compra': buy,
-                'Neutro': hold,
-                'Venda': sell,
-                'Venda Forte': strong_sell,
-                'R': r_value,
-                'C': c_metric
+                'Preço Atual': current_price, 'P/FCO (O)': p_fco_ratio,
+                'Preço Alvo': target_price, 'T (Alvo/Preço)': t_ratio, 'Compra Forte': strong_buy,
+                'Compra': buy, 'Neutro': hold, 'Venda': sell, 'Venda Forte': strong_sell,
+                'R': r_value, 'C': c_metric
             })
-            print(f"Successfully processed {ticker}")
+            print(f"Successfully processed Stock: {ticker}")
+
         except Exception as e:
             print(f'CRITICAL ERROR: Could not process {ticker}: {e}', file=sys.stderr)
             continue
