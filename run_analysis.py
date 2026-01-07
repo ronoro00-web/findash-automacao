@@ -7,7 +7,6 @@ import sys
 def run_analysis():
     """Fetches stock data and saves it as a JavaScript file."""
     
-    # Expanded list of 30 major Brazilian companies
     brazilian_tickers = [
         "VALE3.SA", "PETR4.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA", "WEGE3.SA",
         "B3SA3.SA", "SUZB3.SA", "ITSA4.SA", "GGBR4.SA", "MGLU3.SA", "RDOR3.SA",
@@ -15,7 +14,57 @@ def run_analysis():
         "CSAN3.SA", "CCRO3.SA", "RAIL3.SA", "EQTL3.SA", "ELET3.SA", "VIVT3.SA",
         "HYPE3.SA", "IRBR3.SA", "SBSP3.SA", "RENT3.SA", "CIEL3.SA", "EMBR3.SA"
     ]
-    american_tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
+    
+    # Expanded list of major world companies
+    american_tickers = [
+        "NVDA", "GOOGL", "AAPL", "GOOG", "MSFT", "AMZN", "META", "AVGO", "TSLA", "TSM",
+        "BRK.B", "BRK.A", "LLY", "WMT", "JPM", "V", "ORCL", "MA", "XOM", "JNJ", "ASML",
+        "PLTR", "NFLX", "ABBV", "BAC", "COST", "MU", "HD", "GE", "AMD", "BABA", "PG",
+        "CVX", "UNH", "GS", "CSCO", "WFC", "MS", "AZN", "KO", "HSBC", "CAT", "IBM", "TM",
+        "SAP", "MRK", "NVS", "AXP", "LRCX", "NVO", "RTX", "CRM", "PM", "RY", "TMO",
+        "AMAT", "ABT", "TMUS", "SHOP", "C", "MCD", "APP", "INTC", "ISRG", "SHEL", "LIN",
+        "DIS", "BX", "QCOM", "PEP", "MUFG", "AMGN", "SCHW", "GEV", "INTU", "UBER",
+        "KLAC", "BLK", "BKNG", "BA", "SAN", "TJX", "PDD", "APH", "T", "VZ", "TXN", "ACN",
+        "DHR", "ANET", "NEE", "SPGI", "BHP", "HDB", "COF", "TD", "NOW", "GILD", "SONY",
+        "UBS", "BSX", "RIO", "ADI", "PFE", "ADBE", "SYK", "LOW", "TTE", "PANW", "UL",
+        "UNP", "BBVA", "DE", "SCCO", "WELL", "MDT", "SMFG", "HON", "ETN", "BUD", "PGR",
+        "ARM", "VRTX", "CRWD", "PLD", "CB", "KKR", "SPOT", "COP", "NEM", "LMT", "SNY",
+        "BTI", "PH", "BMY", "IBN", "BN", "MELI", "HCA", "HOOD", "ADP", "CEG", "GSK",
+        "MCK", "CVS", "CMCSA", "SNPS", "ENB", "DASH", "CVNA", "SBUX", "CME", "MFG",
+        "SO", "MCO", "GD", "BMO", "NKE", "ICE", "MO", "AEM", "NTES", "DUK", "MMC", "UPS",
+        "BNS", "BP", "BAM", "BCS", "CDNS", "WM", "MMM", "MAR", "HWM", "USB", "NU", "APO",
+        "PNC", "NOC", "CM", "BK", "TT", "ING", "ABNB", "SE", "REGN", "CRH", "RCL", "SHW",
+        "ELV", "B", "EMR", "SNOW", "AMT", "DELL", "ITUB", "FCX", "NGG", "LYG", "TDG",
+        "ORLY", "RELX", "EQIX", "GM", "ECL", "GLW", "AON", "CTAS", "CI", "CMI", "DB",
+        "MNST", "WMB", "INFY", "PBR", "PBR.A", "FDX", "ITW", "MRVL", "NWG", "NET",
+        "WBD", "SPG", "JCI", "WDC", "HLT", "EPD", "TEL", "STX", "MDLZ", "AJG", "VRT",
+        "CP", "COR", "COIN", "CNQ", "PWR", "RACE", "CSX", "RSG", "TFC", "NSC", "SLB",
+        "TRV", "MSI", "MFC", "CL", "ADSK", "CNI", "PCAR", "AMX", "AEP", "ROST", "KMI",
+        "VALE", "NXPI", "RKT", "EQNR", "FTNT", "TRI", "LHX", "E", "APD", "AFL", "BDX",
+        "NDAQ", "IDXX", "WPM", "ET", "SRE", "VLO", "ARES", "EOG", "URI", "ALNY", "ZTS",
+        "WDAY", "PSX", "AZO", "PYPL", "SU", "DLR", "F", "ALL", "TRP", "RBLX", "MPLX", "O",
+        "VST", "MET", "MPC", "CMG", "EA", "BIDU", "TCOM", "TAK", "DDOG", "CBRE", "CAH",
+        "AXON", "RDDT", "ARGX", "AME", "HEI", "MSTR", "EW", "D", "BKR", "GWW", "FER",
+        "TTWO", "DEO", "PSA", "TGT", "ROP", "DAL", "AU", "FAST", "AMP", "CTVA", "ROK",
+        "MPWR", "RKLB", "OKE", "HLN", "CARR", "CCJ", "MSCI", "FERG", "IMO", "EXC",
+        "WCN", "XEL", "TEAM", "LNG", "CPNG", "CUK", "FNV", "SYM", "CCL", "AIG", "HEI.A",
+        "A", "YUM", "LVS", "IQV", "ETR", "GFI", "JD", "DHI", "PUK", "PRU", "OXY", "CTSH",
+        "EBAY", "GRMN", "FANG", "PAYX", "ALC", "ABEV", "MCHP", "VEEV", "TKO", "GEHC",
+        "PEG", "VMC", "CCEP", "ASX", "HMC", "TRGP", "UAL", "EL", "HIG", "MLM", "NUE",
+        "FICO", "NOK", "KR", "INSM", "CCI", "WAB", "CPRT", "FISV", "TEVA", "STT", "KDP",
+        "FLUT", "KGC", "ZS", "KEYS", "HSY", "RYAAY", "EXPE", "CIEN", "FIX", "RMD",
+        "VTR", "MDB", "ED", "SLF", "NTRA", "MT", "CLS", "ODFL", "SYY", "BBD", "BBDO",
+        "FIS", "OTIS", "TER", "PCG", "UI", "ACGL", "SOFI", "WEC", "EQT", "XYL",
+        "LYV", "HUM", "IX", "ERIC", "VIK", "FOXA", "COHR", "CHT", "VOD", "RJF", "KMB",
+        "IR", "FITB", "FMX", "MTB", "IBKR", "KVUE", "ASTS", "WTW", "FOX", "SYF",
+        "DG", "WIT", "STLA", "KB", "VRSK", "CVE", "QSR", "CHTR", "HPE", "MTD", "EXR",
+        "VICI", "NTR", "EME", "ESLT", "WDS", "LPLA", "ULTA", "ROL", "NRG", "HBAN",
+        "LITE", "ADM", "ALAB", "DXCM", "DOV", "AFRM", "KHC", "PHG", "TPR", "NTRS",
+        "FCNCA", "MKL", "BIIB", "CSGP", "BRO", "CBOE", "AEE", "ATO", "DTE", "TSCO",
+        "TME", "NMR", "SHG", "CFG", "BE", "EFX", "DLTR", "IRM", "LEN.B", "FSLR",
+        "STM", "WRB", "FTS"
+    ]
+
     all_tickers = brazilian_tickers + american_tickers
     results = []
 
