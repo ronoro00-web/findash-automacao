@@ -67,11 +67,8 @@ def run_analysis():
     brazilian_etfs = ["BOVA11.SA", "SPXR11.SA", "LFTB11.SA", "AREA11.SA", "DIVO11.SA", "B5MB11.SA", "DOLA11.SA", "AUPO11.SA"]
     american_etfs = ["BTCI", "DIVO", "GLD", "GPIQ", "IBIT", "JEPQ", "MCHI", "QDVO", 
                      "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG"]
-    etf_tickers = brazilian_etfs + american_etfs
     
-    all_brazilian_assets = brazilian_tickers + brazilian_etfs
-
-    all_tickers = brazilian_tickers + american_tickers + etf_tickers
+    all_tickers = brazilian_tickers + american_tickers + brazilian_etfs + american_etfs
     results = []
 
     print(f"--- Starting Analysis for {len(all_tickers)} Tickers (Stocks and ETFs) ---")
@@ -82,16 +79,30 @@ def run_analysis():
             asset = yf.Ticker(ticker)
             info = asset.info
 
-            is_brazilian = ticker in all_brazilian_assets
-            price_prefix = "R$" if is_brazilian else "U$"
-            
+            # --- Tagging and Currency Formatting ---
+            tag = ''
+            price_prefix = ''
+            if ticker in brazilian_tickers:
+                tag = 'Ação Brasileira'
+                price_prefix = 'R$'
+            elif ticker in american_tickers:
+                tag = 'Ação Americana'
+                price_prefix = 'U$'
+            elif ticker in brazilian_etfs:
+                tag = 'ETF Brasileiro'
+                price_prefix = 'R$'
+            elif ticker in american_etfs:
+                tag = 'ETF Americano'
+                price_prefix = 'U$'
+
             current_price = info.get('regularMarketPrice')
             formatted_current_price = f"{price_prefix} {current_price:.2f}" if current_price is not None else "N/A"
 
             # --- ETF Processing ---
-            if ticker in etf_tickers:
+            if ticker in brazilian_etfs or ticker in american_etfs:
                 results.append({
-                    'Ticker': f"{ticker} (ETF)",
+                    'Ticker': ticker,
+                    'Tag': tag,
                     'Preço Atual': formatted_current_price,
                     'P/FCO (O)': 'N/A',
                     'Preço Alvo': 'N/A',
@@ -100,7 +111,7 @@ def run_analysis():
                     'R': 'N/A',
                     'C': 'N/A'
                 })
-                print(f"Successfully processed ETF: {ticker}")
+                print(f"Successfully processed {tag}: {ticker}")
                 continue
 
             # --- Stock Processing ---
@@ -140,6 +151,7 @@ def run_analysis():
 
             results.append({
                 'Ticker': ticker,
+                'Tag': tag,
                 'Preço Atual': formatted_current_price,
                 'P/FCO (O)': p_fco_ratio,
                 'Preço Alvo': formatted_target_price,
@@ -148,7 +160,7 @@ def run_analysis():
                 'R': r_value,
                 'C': c_metric
             })
-            print(f"Successfully processed Stock: {ticker}")
+            print(f"Successfully processed {tag}: {ticker}")
 
         except Exception as e:
             print(f'CRITICAL ERROR: Could not process {ticker}: {e}', file=sys.stderr)
