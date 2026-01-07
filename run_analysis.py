@@ -33,45 +33,54 @@ def run_analysis():
         "SO", "MCO", "GD", "BMO", "NKE", "ICE", "MO", "AEM", "DUK", "MMC", "UPS",
         "BNS", "BP", "BAM", "BCS", "CDNS", "WM", "MMM", "MAR", "HWM", "USB", "NU", "APO",
         "PNC", "NOC", "CM", "BK", "TT", "ING", "ABNB", "SE", "REGN", "CRH", "RCL", "SHW",
-        "ELV", "B", "EMR", "SNOW", "AMT", "DELL", "ITUB", "FCX", "NGG", "LYG", "TDG",
-        "ORLY", "RELX", "EQIX", "GM", "ECL", "GLW", "AON", "CTAS", "CI", "CMI", "DB",
+        "ELV", "B", "EMR", "SNOW", "DELL", "ITUB", "FCX", "NGG", "LYG", "TDG",
+        "ORLY", "RELX", "GM", "ECL", "GLW", "AON", "CTAS", "CI", "CMI", "DB",
         "MNST", "WMB", "INFY", "PBR.A", "FDX", "ITW", "MRVL", "NWG", "NET",
-        "WBD", "SPG", "JCI", "WDC", "HLT", "EPD", "TEL", "STX", "MDLZ", "AJG", "VRT",
+        "WBD", "JCI", "WDC", "HLT", "EPD", "TEL", "STX", "MDLZ", "AJG", "VRT",
         "CP", "COR", "COIN", "CNQ", "PWR", "RACE", "CSX", "RSG", "TFC", "NSC", "SLB",
         "TRV", "MSI", "MFC", "CL", "ADSK", "CNI", "PCAR", "AEP", "ROST", "KMI",
         "NXPI", "RKT", "EQNR", "FTNT", "TRI", "LHX", "E", "APD", "AFL", "BDX",
         "NDAQ", "IDXX", "WPM", "SRE", "VLO", "ARES", "EOG", "URI", "ALNY", "ZTS",
-        "WDAY", "PSX", "AZO", "PYPL", "SU", "DLR", "F", "ALL", "TRP", "RBLX", "MPLX", "O",
-        "VST", "MET", "MPC", "CMG", "EA", "CBRE", "CAH",
+        "WDAY", "PSX", "AZO", "PYPL", "SU", "DLR", "F", "ALL", "TRP", "RBLX", "MPLX",
+        "VST", "MET", "MPC", "CMG", "EA",
         "AXON", "RDDT", "ARGX", "AME", "HEI", "MSTR", "EW", "D", "BKR", "GWW", "FER",
-        "TTWO", "DEO", "PSA", "TGT", "ROP", "DAL", "AU", "FAST", "AMP", "CTVA", "ROK",
+        "TTWO", "DEO", "TGT", "ROP", "DAL", "AU", "FAST", "AMP", "CTVA", "ROK",
         "MPWR", "RKLB", "OKE", "HLN", "CARR", "CCJ", "MSCI", "FERG", "IMO", "EXC",
         "WCN", "XEL", "TEAM", "CPNG", "CUK", "FNV", "SYM", "CCL", "AIG", "HEI.A",
         "A", "YUM", "LVS", "IQV", "ETR", "GFI", "DHI", "PUK", "PRU", "OXY", "CTSH",
         "EBAY", "GRMN", "PAYX", "ALC", "MCHP", "VEEV", "TKO", "GEHC",
         "PEG", "VMC", "CCEP", "HMC", "TRGP", "EL", "HIG", "MLM", "NUE",
-        "FICO", "NOK", "KR", "INSM", "CCI", "WAB", "CPRT", "FISV", "TEVA", "STT", "KDP",
+        "FICO", "NOK", "KR", "INSM", "WAB", "CPRT", "FISV", "TEVA", "STT", "KDP",
         "FLUT", "KGC", "ZS", "KEYS", "HSY", "RYAAY", "EXPE", "CIEN", "FIX", "RMD",
-        "VTR", "MDB", "ED", "SLF", "NTRA", "MT", "CLS", "ODFL", "SYY", "BBDO",
+        "MDB", "ED", "SLF", "NTRA", "MT", "CLS", "ODFL", "SYY", "BBDO",
         "FIS", "OTIS", "TER", "PCG", "UI", "ACGL", "SOFI", "WEC", "EQT", "XYL",
         "LYV", "HUM", "IX", "ERIC", "VIK", "FOXA", "COHR", "CHT", "VOD", "RJF", "KMB",
         "IR", "FITB", "MTB", "IBKR", "KVUE", "ASTS", "WTW", "FOX", "SYF",
-        "DG", "WIT", "STLA", "VRSK", "QSR", "CHTR", "HPE", "MTD", "EXR",
-        "VICI", "NTR", "EME", "ESLT", "WDS", "LPLA", "ULTA", "ROL", "NRG", "HBAN",
+        "DG", "WIT", "STLA", "VRSK", "QSR", "CHTR", "HPE", "MTD",
+        "NTR", "EME", "ESLT", "WDS", "LPLA", "ULTA", "ROL", "NRG", "HBAN",
         "LITE", "ADM", "ALAB", "DXCM", "DOV", "AFRM", "KHC", "PHG", "TPR", "NTRS",
-        "FCNCA", "MKL", "BIIB", "CSGP", "BRO", "CBOE", "AEE", "ATO", "DTE", "TSCO",
-        "NMR", "CFG", "BE", "EFX", "DLTR", "IRM", "LEN.B", "FSLR",
+        "FCNCA", "MKL", "BIIB", "BRO", "CBOE", "AEE", "ATO", "DTE", "TSCO",
+        "NMR", "CFG", "BE", "EFX", "DLTR", "LEN.B", "FSLR",
         "STM", "WRB", "FTS"
+    ]
+
+    reit_tickers = [
+        "ADC", "AHR", "AHT", "AMH", "AMT", "ARE", "AVB", "BRX", "BXP", "CBRE", "CCI", "CPT", "CSGP", 
+        "CTRE", "CUBE", "CUZ", "DLR", "DOC", "EGP", "ELS", "EPRT", "EQIX", "EQR", "ESS", "EXR", 
+        "FR", "FRMI", "FRT", "FSP", "GLPI", "HR", "HST", "INVH", "IRM", "IRT", "KIM", "KRC", 
+        "KRG", "LAMR", "LINE", "MAA", "MAC", "MRP", "NNN", "O", "OHI", "ONL", "OUT", "PECO", 
+        "PLD", "PSA", "REG", "REXR", "RHP", "SBAC", "SBRA", "SELF", "SKT", "SPG", "STAG", "SUI", 
+        "TRNO", "UDR", "VICI", "VNO", "VTR", "WELL", "WPC", "WY"
     ]
 
     brazilian_etfs = ["BOVA11.SA", "SPXR11.SA", "LFTB11.SA", "AREA11.SA", "DIVO11.SA", "B5MB11.SA", "DOLA11.SA", "AUPO11.SA"]
     american_etfs = ["BTCI", "DIVO", "GLD", "GPIQ", "IBIT", "JEPQ", "MCHI", "QDVO", 
                      "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG"]
     
-    all_tickers = brazilian_tickers + american_tickers + brazilian_etfs + american_etfs
+    all_tickers = brazilian_tickers + american_tickers + reit_tickers + brazilian_etfs + american_etfs
     results = []
 
-    print(f"--- Starting Analysis for {len(all_tickers)} Tickers (Stocks and ETFs) ---")
+    print(f"--- Starting Analysis for {len(all_tickers)} Tickers ---")
 
     for ticker in all_tickers:
         try:
@@ -79,14 +88,15 @@ def run_analysis():
             asset = yf.Ticker(ticker)
             info = asset.info
 
-            # --- Tagging and Currency Formatting ---
-            tag = ''
-            price_prefix = ''
+            tag, price_prefix = '', ''
             if ticker in brazilian_tickers:
                 tag = 'Ação Brasileira'
                 price_prefix = 'R$'
             elif ticker in american_tickers:
                 tag = 'Ação Americana'
+                price_prefix = 'U$'
+            elif ticker in reit_tickers:
+                tag = 'REIT'
                 price_prefix = 'U$'
             elif ticker in brazilian_etfs:
                 tag = 'ETF Brasileiro'
@@ -98,36 +108,29 @@ def run_analysis():
             current_price = info.get('regularMarketPrice')
             formatted_current_price = f"{price_prefix} {current_price:.2f}" if current_price is not None else "N/A"
 
-            # --- ETF Processing ---
-            if ticker in brazilian_etfs or ticker in american_etfs:
+            if tag in ['ETF Brasileiro', 'ETF Americano']:
                 results.append({
                     'Ticker': ticker,
                     'Tag': tag,
                     'Preço Atual': formatted_current_price,
-                    'P/FCO (O)': 'N/A',
-                    'Preço Alvo': 'N/A',
-                    'T (Alvo/Preço)': 'N/A',
+                    'P/FCO (O)': 'N/A', 'Preço Alvo': 'N/A', 'T (Alvo/Preço)': 'N/A',
                     'Compra Forte': 'N/A', 'Compra': 'N/A', 'Neutro': 'N/A', 'Venda': 'N/A', 'Venda Forte': 'N/A',
-                    'R': 'N/A',
-                    'C': 'N/A'
+                    'R': 'N/A', 'C': 'N/A'
                 })
                 print(f"Successfully processed {tag}: {ticker}")
                 continue
 
-            # --- Stock Processing ---
             p_fco_ratio = None
             try:
                 cashflow = asset.get_cashflow()
-                ocf_key = 'OperatingCashFlow'
-                if not cashflow.empty and ocf_key in cashflow.index:
-                    operating_cash_flow = cashflow.loc[ocf_key].iloc[0]
+                if not cashflow.empty and 'OperatingCashFlow' in cashflow.index:
+                    operating_cash_flow = cashflow.loc['OperatingCashFlow'].iloc[0]
                     shares_outstanding = info.get('sharesOutstanding')
-                    if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
+                    if operating_cash_flow and shares_outstanding > 0:
                         fco_per_share = operating_cash_flow / shares_outstanding
-                        if current_price and fco_per_share and fco_per_share > 0:
+                        if current_price and fco_per_share > 0:
                             p_fco_ratio = current_price / fco_per_share
-            except Exception:
-                pass
+            except Exception: pass
 
             target_price = info.get('targetMeanPrice')
             formatted_target_price = f"{price_prefix} {target_price:.2f}" if target_price is not None else "N/A"
@@ -144,21 +147,13 @@ def run_analysis():
                 strong_sell = int(latest_recs.get('strongSell', 0))
 
             r_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5)
-
-            c_metric = None
-            if t_ratio and r_value and p_fco_ratio and p_fco_ratio != 0:
-                c_metric = (t_ratio * r_value) / p_fco_ratio
+            c_metric = (t_ratio * r_value) / p_fco_ratio if t_ratio and r_value and p_fco_ratio and p_fco_ratio != 0 else None
 
             results.append({
-                'Ticker': ticker,
-                'Tag': tag,
-                'Preço Atual': formatted_current_price,
-                'P/FCO (O)': p_fco_ratio,
-                'Preço Alvo': formatted_target_price,
-                'T (Alvo/Preço)': t_ratio,
+                'Ticker': ticker, 'Tag': tag, 'Preço Atual': formatted_current_price,
+                'P/FCO (O)': p_fco_ratio, 'Preço Alvo': formatted_target_price, 'T (Alvo/Preço)': t_ratio,
                 'Compra Forte': strong_buy, 'Compra': buy, 'Neutro': hold, 'Venda': sell, 'Venda Forte': strong_sell,
-                'R': r_value,
-                'C': c_metric
+                'R': r_value, 'C': c_metric
             })
             print(f"Successfully processed {tag}: {ticker}")
 
