@@ -5,88 +5,30 @@ import os
 
 def run_analysis():
     """Fetches stock data and saves it as a JavaScript file."""
-    brazilian_tickers = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBDC4.SA", "ABEV3.SA"]
-    american_tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
-    all_tickers = brazilian_tickers + american_tickers
-    results = []
+    # Using a single ticker for focused debugging
+    ticker = "AAPL"
+    print(f"--- Starting Debugging for {ticker} ---")
 
-    print("Starting stock data analysis...")
+    try:
+        stock = yf.Ticker(ticker)
+        
+        # Get the cashflow statement
+        cashflow = stock.get_cashflow()
+        
+        if not cashflow.empty:
+            # Print all available index names from the cashflow report
+            print("Available cashflow metrics:")
+            print(list(cashflow.index))
+        else:
+            print("Cashflow data is empty.")
 
-    for ticker in all_tickers:
-        try:
-            stock = yf.Ticker(ticker)
-            info = stock.info
+    except Exception as e:
+        print(f'Could not process {ticker}: {e}')
 
-            current_price = info.get('regularMarketPrice')
-            target_price = info.get('targetMeanPrice')
-            
-            cashflow = stock.get_cashflow()
-            operating_cash_flow = None
-            if not cashflow.empty:
-                # Try a few common names for Operating Cash Flow
-                if 'Operating Cash Flow' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Operating Cash Flow'].iloc[0]
-                elif 'Total Cash From Operating Activities' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Total Cash From Operating Activities'].iloc[0]
-                elif 'Cash Flow From Operating Activities' in cashflow.index:
-                    operating_cash_flow = cashflow.loc['Cash Flow From Operating Activities'].iloc[0]
-
-            shares_outstanding = info.get('sharesOutstanding')
-            fco_per_share = None
-            p_fco_ratio = None # This is 'O'
-            if operating_cash_flow and shares_outstanding and shares_outstanding > 0:
-                fco_per_share = operating_cash_flow / shares_outstanding
-                if current_price and fco_per_share > 0:
-                    p_fco_ratio = current_price / fco_per_share
-
-            t_ratio = None # This is 'T'
-            if target_price and current_price and current_price > 0:
-                t_ratio = target_price / current_price
-
-            recs = stock.recommendations
-            strong_buy, buy, hold, sell, strong_sell = 0, 0, 0, 0, 0
-            if recs is not None and not recs.empty:
-                latest_recs = recs.iloc[-1]
-                strong_buy = int(latest_recs.get('strongBuy', 0))
-                buy = int(latest_recs.get('buy', 0))
-                hold = int(latest_recs.get('hold', 0))
-                sell = int(latest_recs.get('sell', 0))
-                strong_sell = int(latest_recs.get('strongSell', 0))
-
-            r_value = (strong_buy * 3) + buy + (hold * -1) + (sell * -3) + (strong_sell * -5) # This is 'R'
-
-            # Calculate the new 'C' metric
-            c_metric = None
-            if t_ratio is not None and r_value is not None and p_fco_ratio is not None and p_fco_ratio != 0:
-                c_metric = (t_ratio * r_value) / p_fco_ratio
-
-            results.append({
-                'Ticker': ticker,
-                'Preço Atual': current_price,
-                'P/FCO (O)': p_fco_ratio,
-                'Preço Alvo': target_price,
-                'T (Alvo/Preço)': t_ratio,
-                'Compra Forte': strong_buy,
-                'Compra': buy,
-                'Neutro': hold,
-                'Venda': sell,
-                'Venda Forte': strong_sell,
-                'R': r_value,
-                'C': c_metric
-            })
-            print(f"Successfully processed {ticker}")
-        except Exception as e:
-            print(f'Could not process {ticker}: {e}')
-
-    df = pd.DataFrame(results)
-    # Restore the original script logic for saving the file
-    json_data = df.to_json(orient='records', indent=4)
-    output_path = 'public/stock_data.js'
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w') as f:
-        f.write(f"const stockData = {json_data};")
-
-    print(f"Analysis complete. Data saved to {output_path}")
+    print(f"--- End Debugging for {ticker} ---")
+    
+    # We are stopping execution here for debugging, so no file will be written.
+    # The main goal is to inspect the logs.
 
 if __name__ == "__main__":
     run_analysis()
