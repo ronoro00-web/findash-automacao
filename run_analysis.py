@@ -8,8 +8,8 @@ def run_analysis():
     """Fetches stock and ETF data and saves it as a JavaScript file."""
 
     brazilian_tickers = [
-        "ABEV3.SA", "AXIA3.SA", "B3SA3.SA", "BBAS3.SA", "BBDC4.SA", "BRAP3.SA", 
-        "CSAN3.SA", "CSNA3.SA", "CYRE3.SA", "EQTL3.SA", "GGBR4.SA", "GOAU3.SA", 
+        "ABEV3.SA", "AXIA3.SA", "B3SA3.SA", "BBAS3.SA", "BBDC4.SA", "BRAP4.SA", 
+        "CSAN3.SA", "CSNA3.SA", "CYRE3.SA", "EQTL3.SA", "GGBR4.SA", "GOAU4.SA", 
         "HYPE3.SA", "IRBR3.SA", "ITSA4.SA", "ITUB4.SA", "LREN3.SA", "MDIA3.SA", 
         "MGLU3.SA", "PGMN3.SA", "PRIO3.SA", "PSSA3.SA", "RADL3.SA", "RAIL3.SA", 
         "RANI3.SA", "RDOR3.SA", "RENT3.SA", "SBSP3.SA", "SMFT3.SA", "SUZB3.SA", 
