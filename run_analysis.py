@@ -8,11 +8,14 @@ def run_analysis():
     """Fetches stock and ETF data and saves it as a JavaScript file."""
 
     brazilian_tickers = [
-        "PETR4.SA", "ITUB4.SA", "BBDC4.SA", "WEGE3.SA",
-        "B3SA3.SA", "SUZB3.SA", "ITSA4.SA", "GGBR4.SA", "MGLU3.SA", "RDOR3.SA",
-        "BPAC11.SA", "LREN3.SA", "RADL3.SA", "BBAS3.SA",
-        "CSAN3.SA", "RAIL3.SA", "EQTL3.SA", "VIVT3.SA",
-        "HYPE3.SA", "IRBR3.SA", "SBSP3.SA", "RENT3.SA"
+        "ABEV3.SA", "ALUP4.SA", "AXIA3.SA", "B3SA3.SA", "BBAS3.SA", "BBDC4.SA", 
+        "BPAC11.SA", "BPAC3.SA", "BRAP3.SA", "CGRA3.SA", "CMIG3.SA", "CSAN3.SA", 
+        "CSNA3.SA", "CYRE3.SA", "EQTL3.SA", "GGBR4.SA", "GOAU3.SA", "HYPE3.SA", 
+        "IRBR3.SA", "ITSA4.SA", "ITUB4.SA", "KLBN3.SA", "LREN3.SA", "MDIA3.SA", 
+        "MGLU3.SA", "PGMN3.SA", "PRIO3.SA", "PSSA3.SA", "RADL3.SA", "RAIL3.SA", 
+        "RANI3.SA", "RDOR3.SA", "RENT3.SA", "SANB3.SA", "SAPR4.SA", "SBSP3.SA", 
+        "SMFT3.SA", "SUZB3.SA", "TAEE3.SA", "TIMS3.SA", "UNIP3.SA", "USIM3.SA", 
+        "VALE3.SA", "VBBR3.SA", "VIVT3.SA", "VLID3.SA", "WEGE3.SA", "YDUQ3.SA"
     ]
     
     american_tickers = [
