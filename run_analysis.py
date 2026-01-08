@@ -13,7 +13,7 @@ def run_analysis():
         "HYPE3.SA", "IRBR3.SA", "ITSA4.SA", "ITUB4.SA", "LREN3.SA", "MDIA3.SA", 
         "MGLU3.SA", "PGMN3.SA", "PRIO3.SA", "PSSA3.SA", "RADL3.SA", "RAIL3.SA", 
         "RANI3.SA", "RDOR3.SA", "RENT3.SA", "SBSP3.SA", "SMFT3.SA", "SUZB3.SA", 
-        "TAEE3.SA", "TIMS3.SA", "VALE3.SA", "VBBR3.SA", "VIVT3.SA", "WEGE3.SA", 
+        "TIMS3.SA", "VALE3.SA", "VBBR3.SA", "VIVT3.SA", "WEGE3.SA", 
         "YDUQ3.SA"
     ]
     
