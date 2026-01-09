@@ -7,16 +7,18 @@ import sys
 def run_analysis():
     """Fetches stock and ETF data and saves it as a JavaScript file."""
 
+    # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
     brazilian_tickers = [
         "ABEV3.SA", "AXIA3.SA", "B3SA3.SA", "BBAS3.SA", "BBDC4.SA", "BRAP4.SA", 
         "CSAN3.SA", "CSNA3.SA", "CYRE3.SA", "EQTL3.SA", "GGBR4.SA", "GOAU4.SA", 
         "HYPE3.SA", "IRBR3.SA", "ITSA4.SA", "ITUB4.SA", "LREN3.SA", "MDIA3.SA", 
-        "MGLU3.SA", "PGMN3.SA", "PRIO3.SA", "PSSA3.SA", "RADL3.SA", "RAIL3.SA", 
+        "MGLU3.SA", "PETR4.SA", "PGMN3.SA", "PRIO3.SA", "PSSA3.SA", "RADL3.SA", "RAIL3.SA", 
         "RANI3.SA", "RDOR3.SA", "RENT3.SA", "SBSP3.SA", "SMFT3.SA", "SUZB3.SA", 
         "TIMS3.SA", "VALE3.SA", "VBBR3.SA", "VIVT3.SA", "WEGE3.SA", 
         "YDUQ3.SA"
     ]
     
+    # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
     american_tickers = [
         "NVDA", "GOOGL", "AAPL", "GOOG", "MSFT", "AMZN", "META", "AVGO", "TSLA",
         "LLY", "WMT", "V", "ORCL", "MA", "XOM", "JNJ", "ASML",
@@ -66,6 +68,7 @@ def run_analysis():
         "STM", "WRB", "FTS"
     ]
 
+    # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
     reit_tickers = [
         "ADC", "AHR", "AMH", "AMT", "ARE", "AVB", "BRX", "BXP", "CBRE", "CCI", "CPT", "CSGP", 
         "CTRE", "CUBE", "CUZ", "DLR", "DOC", "EGP", "ELS", "EPRT", "EQIX", "EQR", "ESS", "EXR", 
@@ -75,7 +78,10 @@ def run_analysis():
         "TRNO", "UDR", "VICI", "VNO", "VTR", "WELL", "WPC", "WY"
     ]
 
+    # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
     brazilian_etfs = ["BOVA11.SA", "SPXR11.SA", "LFTB11.SA", "AREA11.SA", "DIVO11.SA", "B5MB11.SA", "DOLA11.SA", "AUPO11.SA"]
+    
+    # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
     american_etfs = ["BTCI", "DIVO", "GLD", "GPIQ", "IBIT", "JEPQ", "MCHI", "QDVO", 
                      "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG"]
     
