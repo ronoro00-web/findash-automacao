@@ -75,7 +75,7 @@ def run_analysis():
         "FR", "FRMI", "FRT", "FSP", "GLPI", "HR", "HST", "INVH", "IRM", "IRT", "KIM", "KRC", 
         "KRG", "LAMR", "LINE", "MAA", "MAC", "MRP", "NNN", "O", "OHI", "ONL", "OUT", "PECO", 
         "PLD", "PSA", "REG", "REXR", "RHP", "SBAC", "SBRA", "SELF", "SKT", "SPG", "STAG", "SUI", 
-        "TRNO", "UDR", "VICI", "VNO", "VTR", "WELL", "WPC", "WY"
+        "TRNO", "UDR", "VICI", "VNO", "VTR", "WELL", "WPC", "WY", "LTC", "MAIN", "GAIN"
     ]
 
     # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
@@ -83,7 +83,7 @@ def run_analysis():
     
     # DO NOT REMOVE ASSETS FROM THIS LIST - Locked by user request
     american_etfs = ["BTCI", "DIVO", "GLD", "GPIQ", "IBIT", "JEPQ", "MCHI", "QDVO", 
-                     "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG", "SGOV", "USFR"]
+                     "QQQM", "SLV", "SPYI", "VIG", "VOO", "VT", "VUG", "SGOV", "USFR", "PBP"]
     
     all_tickers = brazilian_tickers + american_tickers + reit_tickers + brazilian_etfs + american_etfs
     results = []
