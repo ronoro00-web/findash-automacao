@@ -1,7 +1,7 @@
 import {
     watchAuth, signInGoogle, signUpEmail, signInEmail, signOutUser,
     fetchUserState, saveUserState, subscribeUserState
-} from './firebase-init.js?v=3';
+} from './firebase-init.js?v=4';
 
 (function () {
     'use strict';
@@ -382,7 +382,7 @@ import {
                 <td>${fmtDate(p.expiration)}</td>
                 <td class="num">${dte}d</td>
                 <td class="num">${ret !== null ? fmtPct(ret) : '—'}</td>
-                <td class="action-cell">
+                <td class="action-cell actions-col">
                     <button class="btn-small" data-action="expired" data-id="${p.id}">Expirou</button>
                     <button class="btn-small btn-small--accent" data-action="${p.type === 'PUT' ? 'assigned' : 'called_away'}" data-id="${p.id}">${p.type === 'PUT' ? 'Atribuída' : 'Exercida'}</button>
                     <button class="btn-small btn-small--warn" data-action="buyback" data-id="${p.id}">Recomprar</button>
@@ -413,7 +413,7 @@ import {
                 <td class="num"><input type="number" step="0.01" class="price-input" data-ticker="${t}" value="${price || ''}" placeholder="informar"></td>
                 <td class="num">${marketValue !== null ? fmtMoney(marketValue) : '—'}</td>
                 <td class="num ${unrealized !== null && unrealized >= 0 ? 'positive' : (unrealized !== null ? 'negative' : '')}">${unrealized !== null ? fmtMoney(unrealized) : '—'}</td>
-                <td><button class="btn-small btn-small--danger" data-action="manual-sell" data-ticker="${t}">Vender</button></td>
+                <td class="actions-col"><button class="btn-small btn-small--danger" data-action="manual-sell" data-ticker="${t}">Vender</button></td>
             </tr>`;
         }).join('');
     }

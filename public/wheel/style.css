@@ -332,6 +332,15 @@ tbody tr:hover { background: var(--surface-2); }
 
 .action-cell { display: flex; flex-wrap: wrap; gap: 5px; }
 
+.actions-col {
+    position: sticky;
+    right: 0;
+    background: var(--surface);
+    box-shadow: -6px 0 8px -6px rgba(0, 0, 0, 0.5);
+}
+thead th.actions-col { background: var(--surface-2); }
+tbody tr:hover td.actions-col { background: var(--surface-2); }
+
 .price-input { width: 92px; text-align: right; }
 
 .feedback { font-size: 0.78rem; color: var(--green); min-height: 1.2em; margin-top: 8px; }
