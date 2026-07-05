@@ -13,11 +13,11 @@ import {
     let currentUid = null;
     let unsubscribeSnapshot = null;
 
-    /** @type {{positions: Array<Object>, holdings: Object, prices: Object, manualSales: Array<Object>}} */
+    /** @type {{positions: Array<Object>, holdings: Object, prices: Object, manualSales: Array<Object>, manualPurchases: Array<Object>}} */
     let state = emptyState();
 
     function emptyState() {
-        return { positions: [], holdings: {}, prices: {}, manualSales: [] };
+        return { positions: [], holdings: {}, prices: {}, manualSales: [], manualPurchases: [] };
     }
 
     function normalizeState(raw) {
@@ -26,7 +26,8 @@ import {
             positions: raw.positions || [],
             holdings: raw.holdings || {},
             prices: raw.prices || {},
-            manualSales: raw.manualSales || []
+            manualSales: raw.manualSales || [],
+            manualPurchases: raw.manualPurchases || []
         };
     }
 
@@ -202,6 +203,16 @@ import {
         saveState();
     }
 
+    function manualBuy(ticker, shares, price, date) {
+        ticker = ticker.toUpperCase().trim();
+        const h = state.holdings[ticker] || { shares: 0, costBasis: 0 };
+        h.shares += shares;
+        h.costBasis += shares * price;
+        state.holdings[ticker] = h;
+        state.manualPurchases.push({ id: uid(), ticker, shares, price, date: date || todayStr() });
+        saveState();
+    }
+
     function manualSell(ticker, shares, price) {
         const h = state.holdings[ticker];
         if (!h || h.shares <= 0) return;
@@ -373,9 +384,9 @@ import {
                 <td>${ret !== null ? fmtPct(ret) : '—'}</td>
                 <td class="action-cell">
                     <button class="btn-small" data-action="expired" data-id="${p.id}">Expirou</button>
-                    <button class="btn-small" data-action="${p.type === 'PUT' ? 'assigned' : 'called_away'}" data-id="${p.id}">${p.type === 'PUT' ? 'Atribuída' : 'Exercida'}</button>
-                    <button class="btn-small" data-action="buyback" data-id="${p.id}">Recomprar</button>
-                    <button class="btn-small" data-action="delete" data-id="${p.id}">Excluir</button>
+                    <button class="btn-small btn-small--accent" data-action="${p.type === 'PUT' ? 'assigned' : 'called_away'}" data-id="${p.id}">${p.type === 'PUT' ? 'Atribuída' : 'Exercida'}</button>
+                    <button class="btn-small btn-small--warn" data-action="buyback" data-id="${p.id}">Recomprar</button>
+                    <button class="btn-small btn-small--danger" data-action="delete" data-id="${p.id}">Excluir</button>
                 </td>
             </tr>`;
         }).join('');
@@ -399,10 +410,10 @@ import {
                 <td>${h.shares}</td>
                 <td>${fmtMoney(h.costBasis)}</td>
                 <td>${fmtMoney(avgCost)}</td>
-                <td><input type="number" step="0.01" class="price-input" data-ticker="${t}" value="${price || ''}" placeholder="informar" style="width:90px"></td>
+                <td><input type="number" step="0.01" class="price-input" data-ticker="${t}" value="${price || ''}" placeholder="informar"></td>
                 <td>${marketValue !== null ? fmtMoney(marketValue) : '—'}</td>
                 <td class="${unrealized !== null && unrealized >= 0 ? 'positive' : (unrealized !== null ? 'negative' : '')}">${unrealized !== null ? fmtMoney(unrealized) : '—'}</td>
-                <td><button class="btn-small" data-action="manual-sell" data-ticker="${t}">Vender</button></td>
+                <td><button class="btn-small btn-small--danger" data-action="manual-sell" data-ticker="${t}">Vender</button></td>
             </tr>`;
         }).join('');
     }
@@ -410,7 +421,8 @@ import {
     function renderHistory() {
         const tbody = document.querySelector('#history-table tbody');
         const closed = closedPositions().sort((a, b) => (b.closeDate || '').localeCompare(a.closeDate || ''));
-        const manual = state.manualSales.map(m => ({ manual: true, ...m }));
+        const manualSales = state.manualSales.map(m => ({ manual: true, ...m }));
+        const manualPurchases = state.manualPurchases.map(m => ({ manual: true, ...m }));
         const rows = [];
 
         closed.forEach(p => {
@@ -428,7 +440,7 @@ import {
             });
         });
 
-        manual.forEach(m => {
+        manualSales.forEach(m => {
             rows.push({
                 ticker: m.ticker,
                 type: 'AÇÕES',
@@ -437,6 +449,19 @@ import {
                 outcome: 'Venda Manual',
                 closeDate: m.date,
                 capitalGain: m.gain,
+                ret: null
+            });
+        });
+
+        manualPurchases.forEach(m => {
+            rows.push({
+                ticker: m.ticker,
+                type: 'AÇÕES',
+                strike: m.price,
+                netPrem: -(m.price * m.shares),
+                outcome: 'Compra Manual',
+                closeDate: m.date,
+                capitalGain: null,
                 ret: null
             });
         });
@@ -595,7 +620,7 @@ import {
             const ticker = btn.dataset.ticker;
             const h = state.holdings[ticker];
             openModal(`
-                <h3>Vender Ações Manualmente - ${ticker}</h3>
+                <h3>Vender Ações - ${ticker}</h3>
                 <form>
                     <label>Quantidade de ações (disponível: ${h.shares})
                         <input type="number" name="shares" min="1" max="${h.shares}" value="${h.shares}" required autofocus>
@@ -610,6 +635,33 @@ import {
                 </form>
             `, (data) => {
                 manualSell(ticker, parseInt(data.shares, 10), parseFloat(data.price));
+                render();
+            });
+        });
+
+        document.getElementById('btn-buy-shares').addEventListener('click', () => {
+            openModal(`
+                <h3>Comprar Ações</h3>
+                <form>
+                    <label>Ticker
+                        <input type="text" name="ticker" required autofocus placeholder="ex: PETR4.SA ou AAPL">
+                    </label>
+                    <label>Quantidade de ações
+                        <input type="number" name="shares" min="1" value="100" required>
+                    </label>
+                    <label>Preço pago por ação
+                        <input type="number" name="price" step="0.01" min="0" required>
+                    </label>
+                    <label>Data da compra
+                        <input type="date" name="date" value="${todayStr()}" required>
+                    </label>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" data-cancel>Cancelar</button>
+                        <button type="submit" class="btn-primary">Confirmar Compra</button>
+                    </div>
+                </form>
+            `, (data) => {
+                manualBuy(data.ticker, parseInt(data.shares, 10), parseFloat(data.price), data.date);
                 render();
             });
         });
@@ -643,12 +695,7 @@ import {
             reader.onload = () => {
                 try {
                     const parsed = JSON.parse(reader.result);
-                    state = {
-                        positions: parsed.positions || [],
-                        holdings: parsed.holdings || {},
-                        prices: parsed.prices || {},
-                        manualSales: parsed.manualSales || []
-                    };
+                    state = normalizeState(parsed);
                     saveState();
                     render();
                 } catch (err) {
