@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheel Strategy Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <h1>Wheel Strategy Manager</h1>
+        <nav class="topnav">
+            <a href="../index.html">Análise de Ações</a>
+        </nav>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="new">Nova Operação</button>
+        <button class="tab-btn" data-tab="open">Posições Abertas</button>
+        <button class="tab-btn" data-tab="holdings">Ações em Carteira</button>
+        <button class="tab-btn" data-tab="history">Histórico</button>
+    </nav>
+
+    <main>
+        <section id="tab-dashboard" class="tab-panel active">
+            <div class="cards" id="summary-cards"></div>
+            <h2>Resumo por Ativo</h2>
+            <div class="table-wrap"><table id="ticker-summary-table">
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>Fase Atual</th>
+                        <th>Ações em Carteira</th>
+                        <th>Custo Médio</th>
+                        <th>Prêmio Acumulado</th>
+                        <th>Próximo Vencimento</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table></div>
+            <h2>Prêmio Acumulado ao Longo do Tempo</h2>
+            <canvas id="premium-chart" width="900" height="260"></canvas>
+        </section>
+
+        <section id="tab-new" class="tab-panel">
+            <h2>Registrar Nova Operação</h2>
+            <form id="new-position-form" class="form-grid">
+                <label>Ticker
+                    <input type="text" id="f-ticker" required placeholder="ex: PETR4.SA ou AAPL" autocomplete="off">
+                </label>
+                <label>Tipo de Operação
+                    <select id="f-type">
+                        <option value="PUT">Venda de PUT (Cash-Secured Put)</option>
+                        <option value="CALL">Venda de CALL Coberta</option>
+                    </select>
+                </label>
+                <label>Strike
+                    <input type="number" id="f-strike" step="0.01" min="0" required>
+                </label>
+                <label>Prêmio por Ação
+                    <input type="number" id="f-premium" step="0.01" min="0" required>
+                </label>
+                <label>Contratos
+                    <input type="number" id="f-contracts" step="1" min="1" value="1" required>
+                </label>
+                <label>Data de Abertura
+                    <input type="date" id="f-open-date" required>
+                </label>
+                <label>Data de Vencimento
+                    <input type="date" id="f-expiration" required>
+                </label>
+                <label class="full">Observações
+                    <input type="text" id="f-notes" placeholder="opcional">
+                </label>
+                <button type="submit" class="btn-primary full">Registrar Operação</button>
+            </form>
+            <p id="new-position-feedback" class="feedback"></p>
+        </section>
+
+        <section id="tab-open" class="tab-panel">
+            <h2>Posições Abertas</h2>
+            <div class="table-wrap"><table id="open-positions-table">
+                <thead>
+                    <tr>
+                        <th>Ticker</th><th>Tipo</th><th>Strike</th><th>Prêmio/Ação</th>
+                        <th>Contratos</th><th>Abertura</th><th>Vencimento</th><th>DTE</th>
+                        <th>Retorno Anualizado</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table></div>
+        </section>
+
+        <section id="tab-holdings" class="tab-panel">
+            <h2>Ações em Carteira</h2>
+            <div class="table-wrap"><table id="holdings-table">
+                <thead>
+                    <tr>
+                        <th>Ticker</th><th>Ações</th><th>Custo Total</th><th>Custo Médio/Ação</th>
+                        <th>Preço Atual</th><th>Valor de Mercado</th><th>P&amp;L Não Realizado</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table></div>
+        </section>
+
+        <section id="tab-history" class="tab-panel">
+            <h2>Histórico de Operações</h2>
+            <div class="table-wrap"><table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Ticker</th><th>Tipo</th><th>Strike</th><th>Prêmio Líquido</th>
+                        <th>Resultado</th><th>Fechamento</th><th>Ganho de Capital</th><th>Retorno Anualizado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table></div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <button id="btn-export" class="btn-secondary">Exportar Dados</button>
+        <label class="btn-secondary file-btn">Importar Dados
+            <input type="file" id="btn-import" accept="application/json" hidden>
+        </label>
+        <button id="btn-reset" class="btn-danger">Resetar Dados</button>
+    </footer>
+
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-box" id="modal-box"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
