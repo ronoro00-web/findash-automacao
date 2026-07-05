@@ -279,9 +279,9 @@ import {
                 return `<tr>
                     <td>${s.ticker}</td>
                     <td>${s.phase}</td>
-                    <td>${s.shares}</td>
-                    <td>${s.avgCost !== null ? fmtMoney(s.avgCost) : '—'}</td>
-                    <td class="${s.totalPremium >= 0 ? 'positive' : 'negative'}">${fmtMoney(s.totalPremium)}</td>
+                    <td class="num">${s.shares}</td>
+                    <td class="num">${s.avgCost !== null ? fmtMoney(s.avgCost) : '—'}</td>
+                    <td class="num ${s.totalPremium >= 0 ? 'positive' : 'negative'}">${fmtMoney(s.totalPremium)}</td>
                     <td>${s.nextExpiration ? fmtDate(s.nextExpiration) : '—'}</td>
                 </tr>`;
             }).join('');
@@ -374,14 +374,14 @@ import {
             const label = p.type === 'PUT' ? 'PUT' : 'CALL';
             return `<tr>
                 <td>${p.ticker}</td>
-                <td><span class="pill ${pillClass}">${label}</span></td>
-                <td>${fmtMoney(p.strike)}</td>
-                <td>${fmtMoney(p.premium)}</td>
-                <td>${p.contracts}</td>
+                <td class="center"><span class="pill ${pillClass}">${label}</span></td>
+                <td class="num">${fmtMoney(p.strike)}</td>
+                <td class="num">${fmtMoney(p.premium)}</td>
+                <td class="num">${p.contracts}</td>
                 <td>${fmtDate(p.openDate)}</td>
                 <td>${fmtDate(p.expiration)}</td>
-                <td>${dte}d</td>
-                <td>${ret !== null ? fmtPct(ret) : '—'}</td>
+                <td class="num">${dte}d</td>
+                <td class="num">${ret !== null ? fmtPct(ret) : '—'}</td>
                 <td class="action-cell">
                     <button class="btn-small" data-action="expired" data-id="${p.id}">Expirou</button>
                     <button class="btn-small btn-small--accent" data-action="${p.type === 'PUT' ? 'assigned' : 'called_away'}" data-id="${p.id}">${p.type === 'PUT' ? 'Atribuída' : 'Exercida'}</button>
@@ -407,12 +407,12 @@ import {
             const unrealized = price ? marketValue - h.costBasis : null;
             return `<tr>
                 <td>${t}</td>
-                <td>${h.shares}</td>
-                <td>${fmtMoney(h.costBasis)}</td>
-                <td>${fmtMoney(avgCost)}</td>
-                <td><input type="number" step="0.01" class="price-input" data-ticker="${t}" value="${price || ''}" placeholder="informar"></td>
-                <td>${marketValue !== null ? fmtMoney(marketValue) : '—'}</td>
-                <td class="${unrealized !== null && unrealized >= 0 ? 'positive' : (unrealized !== null ? 'negative' : '')}">${unrealized !== null ? fmtMoney(unrealized) : '—'}</td>
+                <td class="num">${h.shares}</td>
+                <td class="num">${fmtMoney(h.costBasis)}</td>
+                <td class="num">${fmtMoney(avgCost)}</td>
+                <td class="num"><input type="number" step="0.01" class="price-input" data-ticker="${t}" value="${price || ''}" placeholder="informar"></td>
+                <td class="num">${marketValue !== null ? fmtMoney(marketValue) : '—'}</td>
+                <td class="num ${unrealized !== null && unrealized >= 0 ? 'positive' : (unrealized !== null ? 'negative' : '')}">${unrealized !== null ? fmtMoney(unrealized) : '—'}</td>
                 <td><button class="btn-small btn-small--danger" data-action="manual-sell" data-ticker="${t}">Vender</button></td>
             </tr>`;
         }).join('');
@@ -477,12 +477,12 @@ import {
             <tr>
                 <td>${r.ticker}</td>
                 <td>${r.type}</td>
-                <td>${fmtMoney(r.strike)}</td>
-                <td class="${r.netPrem >= 0 ? 'positive' : 'negative'}">${fmtMoney(r.netPrem)}</td>
+                <td class="num">${fmtMoney(r.strike)}</td>
+                <td class="num ${r.netPrem >= 0 ? 'positive' : 'negative'}">${fmtMoney(r.netPrem)}</td>
                 <td>${r.outcome}</td>
                 <td>${fmtDate(r.closeDate)}</td>
-                <td class="${r.capitalGain === undefined || r.capitalGain === null ? '' : (r.capitalGain >= 0 ? 'positive' : 'negative')}">${r.capitalGain === undefined || r.capitalGain === null ? '—' : fmtMoney(r.capitalGain)}</td>
-                <td>${r.ret !== null && r.ret !== undefined ? fmtPct(r.ret) : '—'}</td>
+                <td class="num ${r.capitalGain === undefined || r.capitalGain === null ? '' : (r.capitalGain >= 0 ? 'positive' : 'negative')}">${r.capitalGain === undefined || r.capitalGain === null ? '—' : fmtMoney(r.capitalGain)}</td>
+                <td class="num">${r.ret !== null && r.ret !== undefined ? fmtPct(r.ret) : '—'}</td>
             </tr>
         `).join('');
     }
