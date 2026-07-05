@@ -1,7 +1,7 @@
 import {
     watchAuth, signInGoogle, signUpEmail, signInEmail, signOutUser,
     fetchUserState, saveUserState, subscribeUserState
-} from './firebase-init.js?v=4';
+} from './firebase-init.js?v=5';
 
 (function () {
     'use strict';
@@ -78,8 +78,8 @@ import {
     // ---- Domain calculations ----
 
     function netPremium(p) {
-        const gross = p.premium * 100 * p.contracts;
-        const paidToClose = p.buybackPrice ? p.buybackPrice * 100 * p.contracts : 0;
+        const gross = p.premium * p.contracts;
+        const paidToClose = p.buybackPrice ? p.buybackPrice * p.contracts : 0;
         return gross - paidToClose;
     }
 
@@ -175,7 +175,7 @@ import {
         } else if (outcome === 'EXPIRED') {
             p.status = 'EXPIRED';
         } else if (outcome === 'ASSIGNED' && p.type === 'PUT') {
-            const sharesAdded = p.contracts * 100;
+            const sharesAdded = p.contracts;
             const netCost = (p.strike * sharesAdded) - (p.premium * sharesAdded);
             const h = state.holdings[p.ticker] || { shares: 0, costBasis: 0 };
             h.shares += sharesAdded;
@@ -183,7 +183,7 @@ import {
             state.holdings[p.ticker] = h;
             p.status = 'ASSIGNED';
         } else if (outcome === 'CALLED_AWAY' && p.type === 'CALL') {
-            const sharesRemoved = p.contracts * 100;
+            const sharesRemoved = p.contracts;
             const h = state.holdings[p.ticker] || { shares: 0, costBasis: 0 };
             if (h.shares > 0) {
                 const removed = Math.min(sharesRemoved, h.shares);
@@ -247,7 +247,7 @@ import {
         const totalPremium = positions.reduce((s, p) => s + netPremium(p), 0);
         const capitalAtRisk = openPositions()
             .filter(p => p.type === 'PUT')
-            .reduce((s, p) => s + p.strike * 100 * p.contracts, 0);
+            .reduce((s, p) => s + p.strike * p.contracts, 0);
         const activeCycles = allTickers().filter(t => {
             const h = state.holdings[t];
             const hasOpen = state.positions.some(p => p.ticker === t && p.status === 'OPEN');
@@ -552,8 +552,8 @@ import {
             if (type === 'CALL') {
                 const h = state.holdings[ticker.toUpperCase().trim()];
                 const shares = h ? h.shares : 0;
-                if (shares < contracts * 100) {
-                    feedback.textContent = `Aviso: você registrou uma Call coberta para ${contracts * 100} ações, mas possui apenas ${shares} em carteira.`;
+                if (shares < contracts) {
+                    feedback.textContent = `Aviso: você registrou uma Call coberta para ${contracts} ações, mas possui apenas ${shares} em carteira.`;
                     feedback.classList.remove('error');
                 } else {
                     feedback.textContent = 'Operação registrada com sucesso.';
