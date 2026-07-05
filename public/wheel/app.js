@@ -1,7 +1,7 @@
 import {
     watchAuth, signInGoogle, signUpEmail, signInEmail, signOutUser,
     fetchUserState, saveUserState, subscribeUserState
-} from './firebase-init.js';
+} from './firebase-init.js?v=2';
 
 (function () {
     'use strict';
