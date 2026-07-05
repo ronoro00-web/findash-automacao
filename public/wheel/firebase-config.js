@@ -8,10 +8,10 @@
 // design. A segurança dos dados é garantida pelas regras do Firestore
 // (firestore.rules) e pela autenticação, não por esconder esta config.
 export const firebaseConfig = {
-    apiKey: "SUBSTITUA_PELO_SEU_API_KEY",
+    apiKey: "AIzaSyB58_kp-46vB4dU6I33PjkiC_iPLnZzuh8",
     authDomain: "findash-55202.firebaseapp.com",
     projectId: "findash-55202",
-    storageBucket: "findash-55202.appspot.com",
-    messagingSenderId: "SUBSTITUA",
-    appId: "SUBSTITUA"
+    storageBucket: "findash-55202.firebasestorage.app",
+    messagingSenderId: "699971123272",
+    appId: "1:699971123272:web:f1638b66f7bd6afb8ac07d"
 };
