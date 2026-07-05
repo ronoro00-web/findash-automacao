@@ -243,3 +243,64 @@ tbody tr:hover { background: rgba(125,125,125,0.06); }
 }
 
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+
+.hidden { display: none !important; }
+
+.auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    width: 100%;
+    max-width: 360px;
+}
+
+.auth-box h2 { margin-top: 0; }
+.auth-box > p { color: var(--muted); font-size: 0.9rem; margin-top: -4px; }
+
+.auth-box .btn-primary.full { width: 100%; margin-bottom: 4px; }
+
+.auth-divider {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin: 14px 0;
+    position: relative;
+}
+.auth-divider::before, .auth-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    border-top: 1px solid var(--border);
+}
+.auth-divider::before { left: 0; }
+.auth-divider::after { right: 0; }
+
+#auth-form label {
+    display: flex; flex-direction: column; gap: 6px;
+    font-size: 0.85rem; color: var(--muted);
+    margin-bottom: 12px;
+}
+
+#auth-form input {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+}
+
+.auth-actions { display: flex; gap: 8px; }
+.auth-actions button { flex: 1; }
+
+.topnav { display: flex; align-items: center; gap: 12px; }
+#user-email { color: #cfe0ff; font-size: 0.85rem; }

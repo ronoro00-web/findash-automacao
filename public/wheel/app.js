@@ -1,31 +1,47 @@
+import {
+    watchAuth, signInGoogle, signUpEmail, signInEmail, signOutUser,
+    fetchUserState, saveUserState, subscribeUserState
+} from './firebase-init.js';
+
 (function () {
     'use strict';
 
-    const STORAGE_KEY = 'wheelStrategyData_v1';
+    // Dados de uma sessão anterior baseada em localStorage (versão sem login),
+    // migrados automaticamente para o Firestore no primeiro login de cada conta.
+    const LEGACY_STORAGE_KEY = 'wheelStrategyData_v1';
+
+    let currentUid = null;
+    let unsubscribeSnapshot = null;
 
     /** @type {{positions: Array<Object>, holdings: Object, prices: Object, manualSales: Array<Object>}} */
-    let state = loadState();
+    let state = emptyState();
 
-    function loadState() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                return {
-                    positions: parsed.positions || [],
-                    holdings: parsed.holdings || {},
-                    prices: parsed.prices || {},
-                    manualSales: parsed.manualSales || []
-                };
-            }
-        } catch (e) {
-            console.error('Failed to load wheel data', e);
-        }
+    function emptyState() {
         return { positions: [], holdings: {}, prices: {}, manualSales: [] };
     }
 
+    function normalizeState(raw) {
+        if (!raw) return emptyState();
+        return {
+            positions: raw.positions || [],
+            holdings: raw.holdings || {},
+            prices: raw.prices || {},
+            manualSales: raw.manualSales || []
+        };
+    }
+
+    function loadLegacyLocalState() {
+        try {
+            const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+            return raw ? normalizeState(JSON.parse(raw)) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
     function saveState() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (!currentUid) return;
+        saveUserState(currentUid, state).catch(err => console.error('Failed to save wheel data', err));
     }
 
     function uid() {
@@ -644,11 +660,80 @@
         });
 
         document.getElementById('btn-reset').addEventListener('click', () => {
-            if (confirm('Isso apagará todos os dados salvos localmente. Deseja continuar?')) {
-                state = { positions: [], holdings: {}, prices: {}, manualSales: [] };
+            if (confirm('Isso apagará todos os seus dados salvos na nuvem. Deseja continuar?')) {
+                state = emptyState();
                 saveState();
                 render();
             }
+        });
+    }
+
+    function showAuthError(err) {
+        const feedback = document.getElementById('auth-feedback');
+        feedback.textContent = describeAuthError(err);
+    }
+
+    function describeAuthError(err) {
+        const code = err && err.code;
+        const messages = {
+            'auth/invalid-email': 'E-mail inválido.',
+            'auth/user-not-found': 'Usuário não encontrado.',
+            'auth/wrong-password': 'Senha incorreta.',
+            'auth/invalid-credential': 'E-mail ou senha incorretos.',
+            'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
+            'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
+            'auth/popup-closed-by-user': 'Login com Google cancelado.'
+        };
+        return messages[code] || 'Não foi possível autenticar. Tente novamente.';
+    }
+
+    function wireAuth() {
+        document.getElementById('btn-google-signin').addEventListener('click', () => {
+            signInGoogle().catch(showAuthError);
+        });
+
+        document.getElementById('auth-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const mode = e.submitter ? e.submitter.dataset.mode : 'signin';
+            const action = mode === 'signup' ? signUpEmail(email, password) : signInEmail(email, password);
+            action.catch(showAuthError);
+        });
+
+        document.getElementById('btn-signout').addEventListener('click', () => {
+            signOutUser();
+        });
+
+        watchAuth(async (user) => {
+            if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
+
+            if (!user) {
+                currentUid = null;
+                document.getElementById('app-shell').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+                return;
+            }
+
+            currentUid = user.uid;
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-shell').classList.remove('hidden');
+            document.getElementById('user-email').textContent = user.email || '';
+
+            let remote = await fetchUserState(currentUid);
+            if (!remote) {
+                const legacy = loadLegacyLocalState();
+                state = legacy || emptyState();
+                if (legacy) saveState();
+            } else {
+                state = normalizeState(remote);
+            }
+            render();
+
+            unsubscribeSnapshot = subscribeUserState(currentUid, (remoteState) => {
+                state = normalizeState(remoteState);
+                render();
+            });
         });
     }
 
@@ -657,6 +742,6 @@
         wireForm();
         wireTableActions();
         wireFooter();
-        render();
+        wireAuth();
     });
 })();
