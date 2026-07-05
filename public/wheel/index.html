@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wheel Strategy Manager</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
     <div id="auth-screen" class="auth-screen">
@@ -86,8 +86,9 @@
                 <label>Prêmio por Ação
                     <input type="number" id="f-premium" step="0.01" min="0" required>
                 </label>
-                <label>Contratos <span style="text-transform:none;font-weight:400;">(1 contrato = 1 ação; lote padrão = 100)</span>
+                <label>Contratos
                     <input type="number" id="f-contracts" step="1" min="1" value="100" required>
+                    <span class="field-hint">1 contrato = 1 ação; lote padrão = 100</span>
                 </label>
                 <label>Data de Abertura
                     <input type="date" id="f-open-date" required>
@@ -160,6 +161,6 @@
     </div>
     </div>
 
-    <script type="module" src="app.js?v=5"></script>
+    <script type="module" src="app.js?v=6"></script>
 </body>
 </html>
