@@ -1,7 +1,7 @@
 import {
     watchAuth, signInGoogle, signUpEmail, signInEmail, signOutUser,
     fetchUserState, saveUserState, subscribeUserState
-} from './firebase-init.js?v=2';
+} from './firebase-init.js?v=3';
 
 (function () {
     'use strict';
@@ -277,7 +277,7 @@ import {
             tbody.innerHTML = tickers.map(t => {
                 const s = tickerSummary(t);
                 return `<tr>
-                    <td>${s.ticker}</td>
+                    <td><span class="ticker">${s.ticker}</span></td>
                     <td>${s.phase}</td>
                     <td class="num">${s.shares}</td>
                     <td class="num">${s.avgCost !== null ? fmtMoney(s.avgCost) : '—'}</td>
@@ -373,7 +373,7 @@ import {
             const pillClass = p.type === 'PUT' ? 'put' : 'call';
             const label = p.type === 'PUT' ? 'PUT' : 'CALL';
             return `<tr>
-                <td>${p.ticker}</td>
+                <td><span class="ticker">${p.ticker}</span></td>
                 <td class="center"><span class="pill ${pillClass}">${label}</span></td>
                 <td class="num">${fmtMoney(p.strike)}</td>
                 <td class="num">${fmtMoney(p.premium)}</td>
@@ -406,7 +406,7 @@ import {
             const marketValue = price ? price * h.shares : null;
             const unrealized = price ? marketValue - h.costBasis : null;
             return `<tr>
-                <td>${t}</td>
+                <td><span class="ticker">${t}</span></td>
                 <td class="num">${h.shares}</td>
                 <td class="num">${fmtMoney(h.costBasis)}</td>
                 <td class="num">${fmtMoney(avgCost)}</td>
@@ -475,7 +475,7 @@ import {
 
         tbody.innerHTML = rows.map(r => `
             <tr>
-                <td>${r.ticker}</td>
+                <td><span class="ticker">${r.ticker}</span></td>
                 <td>${r.type}</td>
                 <td class="num">${fmtMoney(r.strike)}</td>
                 <td class="num ${r.netPrem >= 0 ? 'positive' : 'negative'}">${fmtMoney(r.netPrem)}</td>
