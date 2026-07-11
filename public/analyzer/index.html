@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Ativos IA</title>
+    <link rel="stylesheet" href="../wheel/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-box">
+            <h2>Análise de Ativos IA</h2>
+            <p>Entre para pesquisar ativos e usar as análises por IA.</p>
+            <button id="btn-google-signin" class="btn-primary full">Entrar com Google</button>
+            <div class="auth-divider">ou</div>
+            <form id="auth-form">
+                <label>E-mail
+                    <input type="email" id="auth-email" required autocomplete="email">
+                </label>
+                <label>Senha
+                    <input type="password" id="auth-password" required minlength="6" autocomplete="current-password">
+                </label>
+                <div class="auth-actions">
+                    <button type="submit" data-mode="signin" class="btn-secondary">Entrar</button>
+                    <button type="submit" data-mode="signup" class="btn-primary">Criar Conta</button>
+                </div>
+            </form>
+            <p id="auth-feedback" class="feedback error"></p>
+        </div>
+    </div>
+
+    <div id="app-shell" class="hidden">
+        <header class="topbar">
+            <h1>Análise de Ativos IA</h1>
+            <nav class="topnav">
+                <a href="../index.html">Análise em Lista</a>
+                <a href="../wheel/index.html">Wheel Strategy</a>
+                <span id="user-email"></span>
+                <button id="btn-signout" class="btn-secondary">Sair</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="search-section">
+                <form id="search-form" class="search-grid">
+                    <label class="ticker-field">Código do Ativo
+                        <input type="text" id="f-ticker" required placeholder="ex: PETR4, HGLG11, AAPL, VOO" autocomplete="off">
+                    </label>
+                    <label>Tipo de Ativo
+                        <select id="f-type">
+                            <option value="br_acao">Ação Brasileira</option>
+                            <option value="br_fii">FII (Fundo Imobiliário)</option>
+                            <option value="br_etf">ETF Brasileiro</option>
+                            <option value="us_acao">Ação Americana (Stock)</option>
+                            <option value="us_etf">ETF Americano</option>
+                        </select>
+                    </label>
+                    <button type="submit" class="btn-primary">Analisar</button>
+                </form>
+                <p id="search-feedback" class="feedback error"></p>
+            </section>
+
+            <section id="widgets-section" class="hidden">
+                <h2>Gráfico</h2>
+                <div id="tv-chart" class="tv-widget tv-widget--chart"></div>
+
+                <div class="widgets-row">
+                    <div>
+                        <h2>Perfil do Ativo</h2>
+                        <div id="tv-symbol-info" class="tv-widget"></div>
+                    </div>
+                    <div>
+                        <h2>Fundamentos</h2>
+                        <div id="tv-financials" class="tv-widget"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai-section" class="hidden">
+                <h2>Análise por IA</h2>
+                <div class="ai-buttons">
+                    <button id="btn-ai-news" class="btn-primary btn-ai">📰 Principais Notícias</button>
+                    <button id="btn-ai-technical" class="btn-primary btn-ai">📈 Tendência Gráfica</button>
+                    <button id="btn-ai-fundamental" class="btn-primary btn-ai">📊 Avaliação Fundamentalista</button>
+                </div>
+
+                <div class="ai-panel" id="panel-news">
+                    <div class="ai-panel-empty">Clique em "Principais Notícias" para buscar as notícias mais relevantes sobre o ativo.</div>
+                </div>
+
+                <div class="ai-panel" id="panel-technical">
+                    <div class="ai-panel-empty">Clique em "Tendência Gráfica" para uma avaliação técnica de alta, baixa ou lateralização.</div>
+                </div>
+
+                <div class="ai-panel" id="panel-fundamental">
+                    <div class="ai-panel-empty">Clique em "Avaliação Fundamentalista" para saber se a empresa está crescendo, estável ou diminuindo.</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
